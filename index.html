@@ -88,6 +88,10 @@
           <i class="fas fa-user-ninja"></i>
           <span>Entrenadores</span>
         </div>
+        <div class="nav-item" data-module="tienda" onclick="switchModule('tienda', this)">
+          <i class="fas fa-store"></i>
+          <span>Tienda e Inventario</span>
+        </div>
         <div class="nav-item" data-module="caja" onclick="switchModule('caja', this)">
           <i class="fas fa-cash-register"></i>
           <span>Caja y Pagos</span>
@@ -607,6 +611,165 @@
             </div>
           </div>
         </div>
+          <div id="module-tienda" class="module-view" style="display: none;">
+          <div class="module-header">
+            <div style="display: flex; gap: 12px;">
+              <button class="btn-action-primary" onclick="openModal('modal-facturar-tienda')">
+                <i class="fas fa-cash-register"></i> Facturar Venta de Tienda
+              </button>
+              <button class="pill-btn" onclick="openModal('modal-nuevo-producto')" style="background: var(--primary); color: white; padding: 12px 18px; border-radius: 14px; font-weight: 700;">
+                <i class="fas fa-plus"></i> Nuevo Producto
+              </button>
+            </div>
+          </div>
+
+          <div class="filter-bar">
+            <div class="filter-search-input">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-tienda" placeholder="Buscar producto (ej: barra, guantes)..." onkeyup="filterTienda()">
+            </div>
+            <div class="filter-pills">
+              <button class="pill-btn active" onclick="filterTiendaTab('all', this)">Todos</button>
+              <button class="pill-btn" onclick="filterTiendaTab('Comida y Bebida', this)">Comida y Bebida</button>
+              <button class="pill-btn" onclick="filterTiendaTab('Accesorios', this)">Accesorios</button>
+            </div>
+          </div>
+
+          <div class="socios-grid" id="tienda-grid-container" style="margin-bottom: 40px;">
+            <div class="socio-card" data-category="Comida y Bebida" data-name="Barra de Proteína Pro">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-purple"><i class="fas fa-cookie-bite"></i></div>
+                  <div>
+                    <div class="member-name">Barra de Proteína Pro</div>
+                    <div class="member-id">Comida y Bebida</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-success">Stock: <strong id="stock-p-1">34</strong></span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$3.50</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Snack Energético</div>
+              </div>
+              <button class="btn-ficha" onclick="venderDirectoProducto('Barra de Proteína Pro', 3.50, '1')">Vender Rápido</button>
+            </div>
+
+            <div class="socio-card" data-category="Comida y Bebida" data-name="Bebida Isotónica Power">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-blue"><i class="fas fa-wine-bottle"></i></div>
+                  <div>
+                    <div class="member-name">Bebida Isotónica Power</div>
+                    <div class="member-id">Comida y Bebida</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-success">Stock: <strong id="stock-p-2">18</strong></span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$2.50</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Hidratación</div>
+              </div>
+              <button class="btn-ficha" onclick="venderDirectoProducto('Bebida Isotónica Power', 2.50, '2')">Vender Rápido</button>
+            </div>
+
+            <div class="socio-card" data-category="Accesorios" data-name="Guantes de Neopreno Gym">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-amber"><i class="fas fa-mitten"></i></div>
+                  <div>
+                    <div class="member-name">Guantes de Neopreno Gym</div>
+                    <div class="member-id">Accesorios</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-warning">Stock: <strong id="stock-p-3">7</strong></span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$15.00</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Protección</div>
+              </div>
+              <button class="btn-ficha" onclick="venderDirectoProducto('Guantes de Neopreno Gym', 15.00, '3')">Vender Rápido</button>
+            </div>
+
+            <div class="socio-card" data-category="Accesorios" data-name="Toalla Deportiva Microfibra">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-green"><i class="fas fa-bath"></i></div>
+                  <div>
+                    <div class="member-name">Toalla Deportiva Microfibra</div>
+                    <div class="member-id">Accesorios</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-success">Stock: <strong id="stock-p-4">12</strong></span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$8.00</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Textil</div>
+              </div>
+              <button class="btn-ficha" onclick="venderDirectoProducto('Toalla Deportiva Microfibra', 8.00, '4')">Vender Rápido</button>
+            </div>
+          </div>
+
+          <div class="widget-card">
+            <div class="widget-header">
+              <div>
+                <h3 class="widget-title">Historial de Ventas de Tienda</h3>
+                <p class="module-desc">Registro de transacciones de productos con opción de anular venta errónea.</p>
+              </div>
+              <span class="badge-status badge-success" id="total-ventas-tienda-badge">Total Recaudado Hoy: $48.50</span>
+            </div>
+
+            <table class="dashboard-table" id="tabla-ventas-tienda">
+              <thead>
+                <tr>
+                  <th>N° Factura</th>
+                  <th>Producto / Ítems</th>
+                  <th>Cant.</th>
+                  <th>Método Pago</th>
+                  <th>Total ($)</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="venta-row-101">
+                  <td><strong>#FAC-3019</strong></td>
+                  <td>Barra de Proteína Pro</td>
+                  <td>2</td>
+                  <td>Efectivo USD</td>
+                  <td>$7.00</td>
+                  <td>
+                    <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('venta-row-101', 7.00)">
+                      <i class="fas fa-trash"></i> Eliminar Venta
+                    </button>
+                  </td>
+                </tr>
+                <tr id="venta-row-102">
+                  <td><strong>#FAC-3020</strong></td>
+                  <td>Guantes de Neopreno Gym</td>
+                  <td>1</td>
+                  <td>Punto de Venta</td>
+                  <td>$15.00</td>
+                  <td>
+                    <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('venta-row-102', 15.00)">
+                      <i class="fas fa-trash"></i> Eliminar Venta
+                    </button>
+                  </td>
+                </tr>
+                <tr id="venta-row-103">
+                  <td><strong>#FAC-3021</strong></td>
+                  <td>Toalla Deportiva Microfibra</td>
+                  <td>3</td>
+                  <td>Pago Móvil</td>
+                  <td>$24.00</td>
+                  <td>
+                    <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('venta-row-103', 24.00)">
+                      <i class="fas fa-trash"></i> Eliminar Venta
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
         <div id="module-caja" class="module-view" style="display: none;">
           <div class="module-header">
@@ -841,6 +1004,83 @@
         <div class="modal-actions">
           <button type="button" class="btn-modal-cancel" onclick="closeModal('modal-nuevo-plan')">Cancelar</button>
           <button type="submit" class="btn-modal-save">Guardar Plan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Nuevo Producto Tienda -->
+  <div id="modal-nuevo-producto" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Nuevo Producto en Tienda</h3>
+        <button class="modal-close" onclick="closeModal('modal-nuevo-producto')">&times;</button>
+      </div>
+      <form onsubmit="handleGuardarProducto(event)">
+        <div class="modal-form-grid">
+          <div class="full-width">
+            <label class="modal-label">Nombre del Producto</label>
+            <input type="text" id="prod-nombre" class="modal-input" placeholder="Ej: Shaker Deportivo 700ml" required>
+          </div>
+          <div>
+            <label class="modal-label">Categoría</label>
+            <select id="prod-cat" class="modal-input">
+              <option value="Comida y Bebida">Comida y Bebida</option>
+              <option value="Accesorios">Accesorios</option>
+            </select>
+          </div>
+          <div>
+            <label class="modal-label">Stock Inicial</label>
+            <input type="number" id="prod-stock" class="modal-input" value="20" required>
+          </div>
+          <div>
+            <label class="modal-label">Precio Unitario ($)</label>
+            <input type="number" step="0.01" id="prod-precio" class="modal-input" value="6.00" required>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="closeModal('modal-nuevo-producto')">Cancelar</button>
+          <button type="submit" class="btn-modal-save">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Facturar Venta de Tienda -->
+  <div id="modal-facturar-tienda" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Facturar Venta de Tienda</h3>
+        <button class="modal-close" onclick="closeModal('modal-facturar-tienda')">&times;</button>
+      </div>
+      <form onsubmit="handleFacturarTienda(event)">
+        <div class="modal-form-grid">
+          <div class="full-width">
+            <label class="modal-label">Seleccionar Producto</label>
+            <select id="factura-prod-select" class="modal-input">
+              <option value="Barra de Proteína Pro|3.50">Barra de Proteína Pro ($3.50)</option>
+              <option value="Bebida Isotónica Power|2.50">Bebida Isotónica Power ($2.50)</option>
+              <option value="Guantes de Neopreno Gym|15.00">Guantes de Neopreno Gym ($15.00)</option>
+              <option value="Toalla Deportiva Microfibra|8.00">Toalla Deportiva Microfibra ($8.00)</option>
+            </select>
+          </div>
+          <div>
+            <label class="modal-label">Cantidad</label>
+            <input type="number" id="factura-cant" class="modal-input" value="1" min="1" required>
+          </div>
+          <div>
+            <label class="modal-label">Método de Pago</label>
+            <select id="factura-metodo" class="modal-input">
+              <option>Efectivo USD</option>
+              <option>Pago Móvil</option>
+              <option>Punto de Venta</option>
+              <option>Zelle</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="closeModal('modal-facturar-tienda')">Cancelar</button>
+          <button type="submit" class="btn-modal-save">Emitir Factura</button>
         </div>
       </form>
     </div>

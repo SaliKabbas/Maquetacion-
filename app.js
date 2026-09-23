@@ -1,3 +1,4 @@
+
 function handleLogin(event) {
       event.preventDefault();
       document.getElementById('login-view').classList.remove('active');
@@ -22,6 +23,7 @@ function handleLogin(event) {
       const selectedModule = document.getElementById('module-' + moduleId);
       if (selectedModule) {
         selectedModule.style.display = 'block';
+        // JS Animation: Fade in transition effect
         selectedModule.style.opacity = '0';
         selectedModule.style.transform = 'translateY(10px)';
         selectedModule.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -47,6 +49,7 @@ function handleLogin(event) {
         socios: ['Gestión de Socios', 'Directorio y control de accesos de miembros'],
         membresias: ['Gestión de Membresías y Planes', 'Ofertas, precios y vigencia de suscripciones'],
         entrenadores: ['Personal de Entrenadores', 'Control de instructores y turnos de atención'],
+        tienda: ['Inventario y Tienda Global Fit', 'Control de comida, bebidas, toallas, guantes y facturación'],
         caja: ['Caja y Registro de Pagos', 'Flujo de efectivo e historial de transacciones'],
         configuracion: ['Configuración del Sistema', 'Parámetros generales de la plataforma']
       };
@@ -117,6 +120,152 @@ function handleLogin(event) {
       });
     }
 
+    function filterTienda() {
+      const query = document.getElementById('search-tienda').value.toLowerCase();
+      document.querySelectorAll('#tienda-grid-container .socio-card').forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        card.style.display = name.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    function filterTiendaTab(category, btn) {
+      document.querySelectorAll('#module-tienda .filter-pills .pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('#tienda-grid-container .socio-card').forEach(card => {
+        const cat = card.getAttribute('data-category');
+        card.style.display = (category === 'all' || cat === category) ? 'flex' : 'none';
+      });
+    }
+
+    let recaudadoTiendaTotal = 48.50;
+
+    function handleGuardarProducto(event) {
+      event.preventDefault();
+      const nombre = document.getElementById('prod-nombre').value;
+      const categoria = document.getElementById('prod-cat').value;
+      const stock = document.getElementById('prod-stock').value;
+      const precio = parseFloat(document.getElementById('prod-precio').value).toFixed(2);
+
+      const grid = document.getElementById('tienda-grid-container');
+      const card = document.createElement('div');
+      card.className = 'socio-card';
+      card.setAttribute('data-category', categoria);
+      card.setAttribute('data-name', nombre);
+
+      card.innerHTML = `
+        <div class="socio-card-header">
+          <div class="socio-info-main">
+            <div class="avatar-circle avatar-purple"><i class="fas fa-box"></i></div>
+            <div>
+              <div class="member-name">${nombre}</div>
+              <div class="member-id">${categoria}</div>
+            </div>
+          </div>
+          <span class="badge-status badge-success">Stock: <strong>${stock}</strong></span>
+        </div>
+        <div class="socio-details">
+          <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$${precio}</strong></div>
+          <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: ${categoria}</div>
+        </div>
+        <button class="btn-ficha" onclick="venderDirectoProducto('${nombre}', ${precio}, 'custom')">Vender Rápido</button>
+      `;
+
+      grid.prepend(card);
+      
+      // Actualizar select de facturación
+      const select = document.getElementById('factura-prod-select');
+      const opt = document.createElement('option');
+      opt.value = `${nombre}|${precio}`;
+      opt.textContent = `${nombre} ($${precio})`;
+      select.appendChild(opt);
+
+      event.target.reset();
+      closeModal('modal-nuevo-producto');
+      showToast(`Producto "${nombre}" agregado al inventario`);
+    }
+
+    function venderDirectoProducto(nombre, precio, id) {
+      const cant = 1;
+      const total = precio * cant;
+      recaudadoTiendaTotal += total;
+      document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
+
+      const tabla = document.querySelector('#tabla-ventas-tienda tbody');
+      const rowId = 'venta-row-' + Math.floor(Math.random() * 90000);
+      const facturaNum = '#FAC-' + Math.floor(3030 + Math.random() * 90);
+
+      const tr = document.createElement('tr');
+      tr.id = rowId;
+      tr.innerHTML = `
+        <td><strong>${facturaNum}</strong></td>
+        <td>${nombre}</td>
+        <td>${cant}</td>
+        <td>Efectivo Rápido</td>
+        <td>$${total.toFixed(2)}</td>
+        <td>
+          <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('${rowId}', ${total})">
+            <i class="fas fa-trash"></i> Eliminar Venta
+          </button>
+        </td>
+      `;
+      tabla.prepend(tr);
+      showToast(`Venta de ${nombre} facturada correctamente`);
+    }
+
+    function handleFacturarTienda(event) {
+      event.preventDefault();
+      const prodData = document.getElementById('factura-prod-select').value.split('|');
+      const nombre = prodData[0];
+      const precio = parseFloat(prodData[1]);
+      const cant = parseInt(document.getElementById('factura-cant').value);
+      const metodo = document.getElementById('factura-metodo').value;
+
+      const total = precio * cant;
+      recaudadoTiendaTotal += total;
+      document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
+
+      const tabla = document.querySelector('#tabla-ventas-tienda tbody');
+      const rowId = 'venta-row-' + Math.floor(Math.random() * 90000);
+      const facturaNum = '#FAC-' + Math.floor(3025 + Math.random() * 90);
+
+      const tr = document.createElement('tr');
+      tr.id = rowId;
+      tr.innerHTML = `
+        <td><strong>${facturaNum}</strong></td>
+        <td>${nombre}</td>
+        <td>${cant}</td>
+        <td>${metodo}</td>
+        <td>$${total.toFixed(2)}</td>
+        <td>
+          <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('${rowId}', ${total})">
+            <i class="fas fa-trash"></i> Eliminar Venta
+          </button>
+        </td>
+      `;
+      tabla.prepend(tr);
+
+      event.target.reset();
+      closeModal('modal-facturar-tienda');
+      showToast(`Factura ${facturaNum} emitida por $${total.toFixed(2)}`);
+    }
+
+    function eliminarVentaTienda(rowId, monto) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(20px)';
+        row.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          row.remove();
+          recaudadoTiendaTotal -= monto;
+          if (recaudadoTiendaTotal < 0) recaudadoTiendaTotal = 0;
+          document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
+          showToast('Venta anulada y eliminada por error correctamente');
+        }, 300);
+      }
+    }
+
     function filterSocios() {
       const query = document.getElementById('search-socio').value.toLowerCase();
       const statusFilter = document.getElementById('filter-socio-status').value;
@@ -162,6 +311,7 @@ function handleLogin(event) {
       newCard.setAttribute('data-name', nombre);
       newCard.setAttribute('data-status', 'Activo');
 
+      // JavaScript Animation for new card entrance
       newCard.style.opacity = '0';
       newCard.style.transform = 'scale(0.95)';
       newCard.style.transition = 'all 0.4s ease';
@@ -234,6 +384,7 @@ function handleLogin(event) {
       const newPlanCard = document.createElement('div');
       newPlanCard.className = 'plan-card';
       
+      // JavaScript entrance animation
       newPlanCard.style.opacity = '0';
       newPlanCard.style.transform = 'translateY(20px)';
       newPlanCard.style.transition = 'all 0.4s ease';
@@ -311,4 +462,51 @@ function handleLogin(event) {
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 300);
       }, 3000);
+    }
+
+    function openAddEntrenadorModal() {
+    document.getElementById('modal-add-entrenador').classList.remove('hidden');
+    }
+
+    function closeAddEntrenadorModal() {
+        document.getElementById('modal-add-entrenador').classList.add('hidden');
+        document.getElementById('form-add-entrenador').reset();
+    }
+
+    function handleSaveEntrenador(event) {
+        event.preventDefault();
+        
+        const nombre = document.getElementById('new-ent-nombre').value;
+        const especialidad = document.getElementById('new-ent-especialidad').value;
+        const email = document.getElementById('new-ent-email').value;
+        const telefono = document.getElementById('new-ent-telefono').value;
+
+        console.log("Guardando entrenador:", { nombre, especialidad, email, telefono });
+
+        alert('¡Entrenador registrado con éxito!');
+        closeAddEntrenadorModal();
+    }
+
+    function openHorarioModal(nombreEntrenador, especialidadEntrenador, horariosData) {
+        document.getElementById('horario-nombre-entrenador').innerText = nombreEntrenador;
+        document.getElementById('horario-especialidad').innerText = especialidadEntrenador;
+
+        const container = document.getElementById('horario-list-container');
+        container.innerHTML = '';
+
+        horariosData.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700 text-sm';
+            row.innerHTML = `
+                **${item.dia}
+                ${item.hora}
+            `;
+            container.appendChild(row);
+        });
+
+        document.getElementById('modal-horario').classList.remove('hidden');
+    }
+
+    function closeHorarioModal() {
+        document.getElementById('modal-horario').classList.add('hidden');
     }
