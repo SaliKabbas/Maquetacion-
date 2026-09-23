@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLOBAL FIT - Sistema Administrativo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <div id="login-view" class="view-screen active">
+    <div class="login-container">
+      <div class="login-brand">
+        <div class="login-brand-icon">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+        <h1 class="login-title">GLOBAL <span>FIT</span></h1>
+        <p class="login-subtitle">Sistema de Gestión Administrativa</p>
+      </div>
+
+      <div class="login-card">
+        <div class="login-card-header">
+          <h2 class="login-card-title">Iniciar Sesión</h2>
+          <p class="login-card-desc">Ingresa tus credenciales para acceder al panel.</p>
+        </div>
+
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Correo Electrónico</label>
+            <div class="input-wrapper">
+              <i class="fas fa-envelope left-icon"></i>
+              <input type="email" id="login-email" class="form-control" value="admin@globalfit.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Contraseña
+              <a href="#" onclick="showToast('Enlace de recuperación enviado al correo')">¿Olvidaste tu contraseña?</a>
+            </label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock left-icon"></i>
+              <input type="password" id="login-pass" class="form-control" value="••••••••" required>
+              <i class="fas fa-eye right-icon" onclick="togglePasswordVisibility()"></i>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login">
+            Ingresar a Global Fit <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+
+      <p class="login-footer">Gimnasio Global Fit • Prototipo v1.0</p>
+    </div>
+  </div>
+
+  <div id="app-view" class="view-screen app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+        <div>
+          <h3 class="sidebar-title">GLOBAL <span>FIT</span></h3>
+          <span class="sidebar-subtitle">Administración</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <div class="nav-item active" data-module="inicio" onclick="switchModule('inicio', this)">
+          <i class="fas fa-chart-pie"></i>
+          <span>Inicio</span>
+        </div>
+        <div class="nav-item" data-module="socios" onclick="switchModule('socios', this)">
+          <i class="fas fa-users"></i>
+          <span>Socios</span>
+        </div>
+        <div class="nav-item" data-module="membresias" onclick="switchModule('membresias', this)">
+          <i class="fas fa-id-card"></i>
+          <span>Membresías</span>
+        </div>
+        <div class="nav-item" data-module="entrenadores" onclick="switchModule('entrenadores', this)">
+          <i class="fas fa-user-ninja"></i>
+          <span>Entrenadores</span>
+        </div>
+        <div class="nav-item" data-module="caja" onclick="switchModule('caja', this)">
+          <i class="fas fa-cash-register"></i>
+          <span>Caja y Pagos</span>
+        </div>
+        <div class="nav-item" data-module="configuracion" onclick="switchModule('configuracion', this)">
+          <i class="fas fa-cog"></i>
+          <span>Configuración</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar-small">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info-small">
+          <span class="user-name-small">Administrador</span>
+          <span class="user-role-small">Global Fit Admin</span>
+        </div>
+      </div>
+
+      <button class="btn-logout" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div>
+          <h3 id="top-header-title" class="top-header-title">Panel Principal</h3>
+          <span id="top-header-subtitle" class="top-header-subtitle">Resumen en tiempo real del gimnasio Global Fit</span>
+        </div>
+
+        <div class="top-header-actions">
+          <button class="theme-toggle-btn" onclick="toggleTheme()">
+            <i class="fas fa-moon" id="theme-icon"></i>
+            <span id="theme-text">Modo Oscuro</span>
+          </button>
+
+          <div class="search-box-top">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar socio, membresía...">
+          </div>
+
+          <button class="icon-btn-bell" onclick="showToast('No tienes notificaciones pendientes')">
+            <i class="fas fa-bell"></i>
+          </button>
+        </div>
+      </header>
+
+      <div id="module-container" class="content-container">
+        
+        <div id="module-inicio" class="module-view">
+          <div class="welcome-banner">
+            <span class="welcome-badge">GIMNASIO GLOBAL FIT</span>
+            <h2 class="welcome-title">¡Bienvenido al Sistema Administrativo de Global Fit!</h2>
+            <p class="welcome-subtitle">Gestión completa de accesos, planes de membresía, entrenadores y flujo de caja en un solo lugar.</p>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div>
+                <span class="kpi-label">Socios Activos</span>
+                <div class="kpi-value" id="kpi-socios-count">512</div>
+                <span class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +14% este mes</span>
+              </div>
+              <div class="kpi-icon-box icon-purple">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div>
+                <span class="kpi-label">Ingresos del Mes</span>
+                <div class="kpi-value">$9,820</div>
+                <span class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +9.2% meta</span>
+              </div>
+              <div class="kpi-icon-box icon-blue">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div>
+                <span class="kpi-label">Por Vencer (7 días)</span>
+                <div class="kpi-value">18</div>
+                <span class="kpi-trend trend-warning"><i class="fas fa-exclamation-triangle"></i> Vencimientos</span>
+              </div>
+              <div class="kpi-icon-box icon-warning">
+                <i class="fas fa-clock"></i>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div>
+                <span class="kpi-label">Asistencia Hoy</span>
+                <div class="kpi-value">134</div>
+                <span class="kpi-trend trend-info"><i class="fas fa-user-check"></i> Check-ins</span>
+              </div>
+              <div class="kpi-icon-box icon-teal">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-widgets-grid">
+            <div class="widget-card">
+              <div class="widget-header">
+                <h3 class="widget-title">Últimos Accesos Registrados</h3>
+                <a class="widget-link" onclick="switchModule('socios')">Ver directorio →</a>
+              </div>
+
+              <table class="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Socio Global Fit</th>
+                    <th>Plan</th>
+                    <th>Hora</th>
+                    <th>Estatus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="member-cell">
+                        <div class="avatar-circle avatar-purple">MA</div>
+                        <div>
+                          <div class="member-name">María Alvarado</div>
+                          <div class="member-id">ID: #GF-0412</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Plan VIP Global</td>
+                    <td>08:15 AM</td>
+                    <td><span class="badge-status badge-success">Al día</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="member-cell">
+                        <div class="avatar-circle avatar-blue">JR</div>
+                        <div>
+                          <div class="member-name">José Rodríguez</div>
+                          <div class="member-id">ID: #GF-0891</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Mensual Fitness</td>
+                    <td>08:42 AM</td>
+                    <td><span class="badge-status badge-success">Al día</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="member-cell">
+                        <div class="avatar-circle avatar-amber">CG</div>
+                        <div>
+                          <div class="member-name">Camila Gómez</div>
+                          <div class="member-id">ID: #GF-0104</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Trimestral Musculación</td>
+                    <td>09:05 AM</td>
+                    <td><span class="badge-status badge-warning">Por Vencer</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="widget-card">
+              <div class="widget-header">
+                <h3 class="widget-title">Membresías Más Vendidas</h3>
+              </div>
+
+              <div class="progress-item">
+                <div class="progress-info">
+                  <span>Plan VIP Global Fit</span>
+                  <span class="progress-percent">50%</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" style="width: 50%;"></div>
+                </div>
+              </div>
+
+              <div class="progress-item">
+                <div class="progress-info">
+                  <span>Pase Mensual Estándar</span>
+                  <span class="progress-percent">30%</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" style="width: 30%;"></div>
+                </div>
+              </div>
+
+              <div class="progress-item">
+                <div class="progress-info">
+                  <span>Trimestral Musculación</span>
+                  <span class="progress-percent">20%</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" style="width: 20%;"></div>
+                </div>
+              </div>
+
+              <button class="btn-primary-block" onclick="openModal('modal-nuevo-socio')">
+                <i class="fas fa-user-plus"></i> Inscribir Nuevo Socio
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="module-membresias" class="module-view" style="display: none;">
+          <div class="module-header">
+           
+            <button class="btn-action-primary" onclick="openModal('modal-nuevo-plan')">
+              <i class="fas fa-plus"></i> Crear Nuevo Plan
+            </button>
+          </div>
+
+          <h3 class="section-subtitle"><i class="fas fa-tag"></i> Oferta de Planes</h3>
+          
+          <div class="plans-grid" id="plans-grid-container">
+            <div class="plan-card">
+              <div class="plan-name">Pase Diario</div>
+              <div class="plan-duration"><i class="fas fa-clock"></i> Pase 1 Día Libre</div>
+              <div class="plan-price-box">
+                <span class="plan-price">$5.00</span>
+                <span class="plan-period">/ día</span>
+              </div>
+              <ul class="plan-features">
+                <li><i class="fas fa-check-circle"></i> Sala muscular por 1 día</li>
+                <li><i class="fas fa-check-circle"></i> Uso de vestidores</li>
+              </ul>
+              <button class="btn-assign-plan" onclick="showToast('Asignando Pase Diario...')">Asignar a Socio</button>
+            </div>
+
+            <div class="plan-card highlight">
+              <span class="plan-tag">MÁS VENDIDO</span>
+              <div class="plan-name">Estándar Mensual</div>
+              <div class="plan-duration"><i class="fas fa-clock"></i> Acceso Ilimitado</div>
+              <div class="plan-price-box">
+                <span class="plan-price">$35.00</span>
+                <span class="plan-period">/ 30 días</span>
+              </div>
+              <ul class="plan-features">
+                <li><i class="fas fa-check-circle"></i> Área de Pesas y Cardio</li>
+                <li><i class="fas fa-check-circle"></i> Uso de Lockers</li>
+                <li><i class="fas fa-check-circle"></i> 1 Clase Grupal por semana</li>
+              </ul>
+              <button class="btn-assign-plan" onclick="showToast('Asignando Plan Estándar...')">Asignar a Socio</button>
+            </div>
+
+            <div class="plan-card">
+              <div class="plan-name">Trimestral Pro</div>
+              <div class="plan-duration"><i class="fas fa-clock"></i> Acceso Ilimitado</div>
+              <div class="plan-price-box">
+                <span class="plan-price">$90.00</span>
+                <span class="plan-period">/ 90 días</span>
+              </div>
+              <ul class="plan-features">
+                <li><i class="fas fa-check-circle"></i> Pesas y Cardio completo</li>
+                <li><i class="fas fa-check-circle"></i> Evaluación Antropométrica</li>
+                <li><i class="fas fa-check-circle"></i> Descuentos en la Tienda</li>
+              </ul>
+              <button class="btn-assign-plan" onclick="showToast('Asignando Plan Trimestral...')">Asignar a Socio</button>
+            </div>
+          </div>
+
+          <div class="widget-card">
+            <div class="widget-header">
+              <div>
+                <h3 class="widget-title">Estatus de Membresías</h3>
+                <p class="module-desc">Filtra y renueva suscripciones de socios.</p>
+              </div>
+              <button class="btn-action-primary" onclick="openModal('modal-pago')">
+                <i class="fas fa-cash-register"></i> Renovar / Cobrar Membresía
+              </button>
+            </div>
+
+            <div class="filter-bar">
+              <div class="filter-search-input">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-membresia" placeholder="Buscar por socio..." onkeyup="filterMembresiasTable()">
+              </div>
+              <div class="filter-pills">
+                <button class="pill-btn active" onclick="filterMembresiaTab('all', this)">Todos</button>
+                <button class="pill-btn" onclick="filterMembresiaTab('Activa', this)">Activas</button>
+                <button class="pill-btn" onclick="filterMembresiaTab('Por Vencer', this)">Por Vencer</button>
+                <button class="pill-btn" onclick="filterMembresiaTab('Vencida', this)">Vencidas</button>
+              </div>
+            </div>
+
+            <table class="dashboard-table" id="membresias-table">
+              <thead>
+                <tr>
+                  <th>Socio / Cliente</th>
+                  <th>Membresía Asignada</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Vencimiento</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-status="Activa">
+                  <td><strong>María Alejandra Pérez</strong></td>
+                  <td>Plan VIP Black Anual</td>
+                  <td>2026-01-10</td>
+                  <td>2027-01-10</td>
+                  <td><span class="badge-status badge-success">Activa</span></td>
+                  <td><button class="pill-btn" onclick="renovarMembresia('María Alejandra Pérez')">Renovar</button></td>
+                </tr>
+                <tr data-status="Activa">
+                  <td><strong>Gabriel Mendoza</strong></td>
+                  <td>Plan Estándar Mensual</td>
+                  <td>2026-09-01</td>
+                  <td>2026-10-01</td>
+                  <td><span class="badge-status badge-success">Activa</span></td>
+                  <td><button class="pill-btn" onclick="renovarMembresia('Gabriel Mendoza')">Renovar</button></td>
+                </tr>
+                <tr data-status="Por Vencer">
+                  <td><strong>Valeria Gómez</strong></td>
+                  <td>Pase Estudiantil</td>
+                  <td>2026-08-22</td>
+                  <td>2026-09-22</td>
+                  <td><span class="badge-status badge-warning">Por Vencer</span></td>
+                  <td><button class="pill-btn" onclick="renovarMembresia('Valeria Gómez')">Renovar</button></td>
+                </tr>
+                <tr data-status="Vencida">
+                  <td><strong>Carlos Eduardo Silva</strong></td>
+                  <td>Plan Estándar Mensual</td>
+                  <td>2026-07-10</td>
+                  <td>2026-08-10</td>
+                  <td><span class="badge-status badge-danger">Vencida</span></td>
+                  <td><button class="pill-btn" onclick="renovarMembresia('Carlos Eduardo Silva')">Renovar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="module-socios" class="module-view" style="display: none;">
+          <div class="module-header">
+            
+            <button class="btn-action-primary" onclick="openModal('modal-nuevo-socio')">
+              <i class="fas fa-plus"></i> Nuevo Socio
+            </button>
+          </div>
+
+          <div class="filter-bar">
+            <div class="filter-search-input">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-socio" placeholder="Buscar por nombre o cédula..." onkeyup="filterSocios()">
+            </div>
+
+            <div style="display: flex; gap: 14px; align-items: center;">
+              <select id="filter-socio-status" class="form-control" style="padding: 10px 16px; width: auto;" onchange="filterSocios()">
+                <option value="all">Todos los Estados</option>
+                <option value="Activo">Activo</option>
+                <option value="Por Vencer">Por Vencer</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+
+              <div class="view-switcher">
+                <button class="view-btn active" id="btn-view-grid" onclick="setSocioView('grid')">
+                  <i class="fas fa-th-large"></i>
+                </button>
+                <button class="view-btn" id="btn-view-table" onclick="setSocioView('table')">
+                  <i class="fas fa-list"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="socios-grid-view" class="socios-grid">
+            <div class="socio-card" data-name="Carlos Mendoza" data-status="Activo">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-blue">CM</div>
+                  <div>
+                    <div class="member-name">Carlos Mendoza</div>
+                    <div class="member-id">V-18234567</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-success">Activo</span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-phone"></i> 0414-1234567</div>
+                <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>VIP Black</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-10-15</div>
+              </div>
+              <button class="btn-ficha" onclick="verFichaSocio('Carlos Mendoza', 'V-18234567', 'VIP Black', 'Activo')">Ficha Téchnica</button>
+            </div>
+
+            <div class="socio-card" data-name="María Hernández" data-status="Por Vencer">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-purple">MH</div>
+                  <div>
+                    <div class="member-name">María Hernández</div>
+                    <div class="member-id">V-20112334</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-warning">Por Vencer</span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-phone"></i> 0424-7654321</div>
+                <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>Estándar</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-09-22</div>
+              </div>
+              <button class="btn-ficha" onclick="verFichaSocio('María Hernández', 'V-20112334', 'Estándar', 'Por Vencer')">Ficha Téchnica</button>
+            </div>
+
+            <div class="socio-card" data-name="Alejandro Gómez" data-status="Inactivo">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-amber">AG</div>
+                  <div>
+                    <div class="member-name">Alejandro Gómez</div>
+                    <div class="member-id">V-15998877</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-danger">Inactivo</span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-phone"></i> 0412-5554433</div>
+                <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>Trimestral Pro</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-08-30</div>
+              </div>
+              <button class="btn-ficha" onclick="verFichaSocio('Alejandro Gómez', 'V-15998877', 'Trimestral Pro', 'Inactivo')">Ficha Téchnica</button>
+            </div>
+          </div>
+
+          <div id="socios-table-view" class="widget-card" style="display: none;">
+            <table class="dashboard-table" id="socios-table-element">
+              <thead>
+                <tr>
+                  <th>Socio</th>
+                  <th>Cédula</th>
+                  <th>Teléfono</th>
+                  <th>Plan</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-name="Carlos Mendoza" data-status="Activo">
+                  <td><strong>Carlos Mendoza</strong></td>
+                  <td>V-18234567</td>
+                  <td>0414-1234567</td>
+                  <td>VIP Black</td>
+                  <td><span class="badge-status badge-success">Activo</span></td>
+                  <td><button class="pill-btn" onclick="verFichaSocio('Carlos Mendoza', 'V-18234567', 'VIP Black', 'Activo')">Ficha</button></td>
+                </tr>
+                <tr data-name="María Hernández" data-status="Por Vencer">
+                  <td><strong>María Hernández</strong></td>
+                  <td>V-20112334</td>
+                  <td>0424-7654321</td>
+                  <td>Estándar</td>
+                  <td><span class="badge-status badge-warning">Por Vencer</span></td>
+                  <td><button class="pill-btn" onclick="verFichaSocio('María Hernández', 'V-20112334', 'Estándar', 'Por Vencer')">Ficha</button></td>
+                </tr>
+                <tr data-name="Alejandro Gómez" data-status="Inactivo">
+                  <td><strong>Alejandro Gómez</strong></td>
+                  <td>V-15998877</td>
+                  <td>0412-5554433</td>
+                  <td>Trimestral Pro</td>
+                  <td><span class="badge-status badge-danger">Inactivo</span></td>
+                  <td><button class="pill-btn" onclick="verFichaSocio('Alejandro Gómez', 'V-15998877', 'Trimestral Pro', 'Inactivo')">Ficha</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="module-entrenadores" class="module-view" style="display: none;">
+          <div class="module-header">
+           
+            <button class="btn-action-primary" onclick="showToast('Entrenador registrado')">
+              <i class="fas fa-plus"></i> Nuevo Entrenador
+            </button>
+          </div>
+
+          <div class="socios-grid">
+            <div class="socio-card">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-green">RL</div>
+                  <div>
+                    <div class="member-name">Ricardo López</div>
+                    <div class="member-id">Especialista en Hipertrofia</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-success">Disponible</span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-clock"></i> Turno: Mañana (06:00 AM - 02:00 PM)</div>
+                <div class="socio-detail-item"><i class="fas fa-users"></i> Socios asignados: 24</div>
+              </div>
+              <button class="btn-ficha" onclick="showToast('Ver horario de Ricardo')">Ver Horario</button>
+            </div>
+
+            <div class="socio-card">
+              <div class="socio-card-header">
+                <div class="socio-info-main">
+                  <div class="avatar-circle avatar-purple">SF</div>
+                  <div>
+                    <div class="member-name">Sofia Fuentes</div>
+                    <div class="member-id">Instructora de Spinning / Crossfit</div>
+                  </div>
+                </div>
+                <span class="badge-status badge-success">En Clase</span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-detail-item"><i class="fas fa-clock"></i> Turno: Tarde (02:00 PM - 09:00 PM)</div>
+                <div class="socio-detail-item"><i class="fas fa-users"></i> Clases impartidas: 12/sem</div>
+              </div>
+              <button class="btn-ficha" onclick="showToast('Ver horario de Sofia')">Ver Horario</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="module-caja" class="module-view" style="display: none;">
+          <div class="module-header">
+            
+            <button class="btn-action-primary" onclick="openModal('modal-pago')">
+              <i class="fas fa-plus"></i> Registrar Nuevo Pago
+            </button>
+          </div>
+
+          <div class="widget-card">
+            <div class="widget-header">
+              <h3 class="widget-title">Historial de Transacciones Recientes</h3>
+            </div>
+            <table class="dashboard-table" id="tabla-caja">
+              <thead>
+                <tr>
+                  <th>Concepto / Socio</th>
+                  <th>Método</th>
+                  <th>Monto ($)</th>
+                  <th>Fecha y Hora</th>
+                  <th>Recibo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Cobro Mensualidad - María Alvarado</strong></td>
+                  <td>Pago Móvil</td>
+                  <td>$35.00</td>
+                  <td>Hoy, 08:15 AM</td>
+                  <td><button class="pill-btn" onclick="showToast('Imprimiendo Recibo #00102...')"><i class="fas fa-print"></i> #00102</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Pase Diario - Roberto Silva</strong></td>
+                  <td>Efectivo USD</td>
+                  <td>$5.00</td>
+                  <td>Hoy, 09:30 AM</td>
+                  <td><button class="pill-btn" onclick="showToast('Imprimiendo Recibo #00103...')"><i class="fas fa-print"></i> #00103</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Plan Trimestral - Carlos Gómez</strong></td>
+                  <td>Punto de Venta</td>
+                  <td>$90.00</td>
+                  <td>Ayer, 05:40 PM</td>
+                  <td><button class="pill-btn" onclick="showToast('Imprimiendo Recibo #00101...')"><i class="fas fa-print"></i> #00101</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="module-configuracion" class="module-view" style="display: none;">
+          <div class="module-header">
+            
+            <button class="btn-action-primary" onclick="showToast('Configuraciones guardadas')">
+              <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+          </div>
+
+          <div class="widget-card" style="max-width: 600px;">
+            <div class="modal-form-grid">
+              <div class="full-width">
+                <label class="modal-label">Nombre Comercial del Gimnasio</label>
+                <input type="text" class="modal-input" value="GLOBAL FIT S.A.">
+              </div>
+              <div>
+                <label class="modal-label">Moneda Principal</label>
+                <select class="modal-input">
+                  <option>Dólares (USD $)</option>
+                  <option>Bolívares (VES Bs)</option>
+                </select>
+              </div>
+              <div>
+                <label class="modal-label">Aviso de Vencimiento</label>
+                <select class="modal-input">
+                  <option>7 días antes</option>
+                  <option>3 días antes</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Nuevo Socio -->
+  <div id="modal-nuevo-socio" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Nuevo Socio</h3>
+        <button class="modal-close" onclick="closeModal('modal-nuevo-socio')">&times;</button>
+      </div>
+
+      <form onsubmit="handleGuardarSocio(event)">
+        <div class="modal-form-grid">
+          
+          <div>
+            <label class="modal-label">Nombre Completo</label>
+            <input type="text" id="socio-nombre" class="modal-input" required>
+          </div>
+
+          <div>
+            <label class="modal-label">Cédula / ID</label>
+            <input type="text" id="socio-cedula" class="modal-input" required>
+          </div>
+
+          <div>
+            <label class="modal-label">Teléfono</label>
+            <input type="text" id="socio-telefono" class="modal-input">
+          </div>
+
+          <div>
+            <label class="modal-label">Correo Electrónico</label>
+            <input type="email" id="socio-email" class="modal-input">
+          </div>
+
+          <div>
+            <label class="modal-label">Plan Inicial</label>
+            <select id="socio-plan" class="modal-input">
+              <option value="Plan Estándar ($35)">Plan Estándar ($35)</option>
+              <option value="Plan Trimestral ($90)">Plan Trimestral ($90)</option>
+              <option value="Plan VIP Black ($350)">Plan VIP Black ($350)</option>
+              <option value="Pase Diario ($5)">Pase Diario ($5)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="modal-label">Contacto Emergencia</label>
+            <input type="text" id="socio-contacto" class="modal-input" placeholder="Nombre - Teléfono">
+          </div>
+
+          <div class="full-width">
+            <label class="modal-label">Datos Médicos / Condición Especial</label>
+            <textarea id="socio-medico" class="modal-input" placeholder="Ej: Hipertensión, lesión en rodilla derecha..."></textarea>
+          </div>
+
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="closeModal('modal-nuevo-socio')">Cancelar</button>
+          <button type="submit" class="btn-modal-save">Guardar Socio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modulo Pago -->
+  <div id="modal-pago" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Cobro de Membresía</h3>
+        <button class="modal-close" onclick="closeModal('modal-pago')">&times;</button>
+      </div>
+      <form onsubmit="handleRegistrarPago(event)">
+        <div class="modal-form-grid">
+          <div class="full-width">
+            <label class="modal-label">Nombre del Socio</label>
+            <input type="text" id="pago-socio" class="modal-input" placeholder="Ej: María Pérez" required>
+          </div>
+          <div>
+            <label class="modal-label">Monto ($)</label>
+            <input type="number" id="pago-monto" class="modal-input" value="35.00" required>
+          </div>
+          <div>
+            <label class="modal-label">Método de Pago</label>
+            <select id="pago-metodo" class="modal-input">
+              <option>Pago Móvil</option>
+              <option>Efectivo USD</option>
+              <option>Punto de Venta</option>
+              <option>Zelle</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="closeModal('modal-pago')">Cancelar</button>
+          <button type="submit" class="btn-modal-save">Procesar Pago</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Ficha Socio -->
+  <div id="modal-ficha-socio" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Ficha del Socio</h3>
+        <button class="modal-close" onclick="closeModal('modal-ficha-socio')">&times;</button>
+      </div>
+      <div id="ficha-socio-content" style="font-size: 0.92rem; display: flex; flex-direction: column; gap: 14px;">
+      </div>
+      <button class="btn-primary-block" onclick="closeModal('modal-ficha-socio')">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modulo Nuevo Plan de Membresía -->
+  <div id="modal-nuevo-plan" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Crear Nuevo Plan de Membresía</h3>
+        <button class="modal-close" onclick="closeModal('modal-nuevo-plan')">&times;</button>
+      </div>
+
+      <form onsubmit="handleGuardarPlan(event)">
+        <div class="modal-form-grid">
+          <div>
+            <label class="modal-label">Nombre del Plan</label>
+            <input type="text" id="plan-nombre" class="modal-input" placeholder="Ej: Anual VIP" required>
+          </div>
+
+          <div>
+            <label class="modal-label">Duración / Descripción</label>
+            <input type="text" id="plan-duracion" class="modal-input" placeholder="Ej: Acceso Anual Ilimitado" required>
+          </div>
+
+          <div>
+            <label class="modal-label">Precio ($)</label>
+            <input type="number" step="0.01" id="plan-precio" class="modal-input" placeholder="45.00" required>
+          </div>
+
+          <div>
+            <label class="modal-label">Periodo de Cobro</label>
+            <input type="text" id="plan-periodo" class="modal-input" value="/ 30 días" required>
+          </div>
+
+          <div class="full-width">
+            <label class="modal-label">Beneficios (separados por comas)</label>
+            <input type="text" id="plan-beneficios" class="modal-input" placeholder="Ej: Área de Pesas, Sauna, Casillero gratis">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="closeModal('modal-nuevo-plan')">Cancelar</button>
+          <button type="submit" class="btn-modal-save">Guardar Plan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
