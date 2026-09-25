@@ -52,11 +52,67 @@
           <button type="submit" class="btn-login">
             Ingresar a Global Fit <i class="fas fa-arrow-right"></i>
           </button>
+
+          <div class="register-option" style="margin-top: 20px; text-align: center;">
+          <span>¿No tienes cuenta?</span>
+          <a href="javascript:void(0)" class="btn-open-register" onclick="openRegisterModal(event)">Registrarse</a>
+        </div>
         </form>
       </div>
 
       <p class="login-footer">Gimnasio Global Fit • Prototipo v1.0</p>
     </div>
+<div id="register-modal" class="modal-overlay">
+  <div class="modal-card">
+    <button type="button" class="modal-close-btn" onclick="closeRegisterModal()">&times;</button>
+
+    <div class="modal-header">
+      <div class="modal-icon">
+        <i class="fas fa-user-plus"></i>
+      </div>
+      <p class="modal-subtitle">Regístrate para acceder al panel de Global Fit</p>
+    </div>
+
+    <form id="register-form" onsubmit="return submitRegister(event)">
+      <div class="form-group">
+        <label class="form-label">NOMBRE USUARIO</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user left-icon"></i>
+          <input type="text" id="reg-name" class="form-control" placeholder="Nombre" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">CORREO ELECTRÓNICO</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope left-icon"></i>
+          <input type="email" id="reg-email" class="form-control" placeholder="correo@gmail.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">CONTRASEÑA</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock left-icon"></i>
+          <input type="password" id="reg-pass" class="form-control" placeholder="••••" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">CONFIRMAR CONTRASEÑA</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock left-icon"></i>
+          <input type="password" id="reg-confirm-pass" class="form-control" placeholder="••••" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login" style="margin-top: 15px;">
+        <span>Completar Registro</span> <i class="fas fa-check-circle"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
   </div>
 
   <div id="app-view" class="view-screen app-layout">

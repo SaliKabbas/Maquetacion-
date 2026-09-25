@@ -510,3 +510,89 @@ function handleLogin(event) {
     function closeHorarioModal() {
         document.getElementById('modal-horario').classList.add('hidden');
     }
+
+    /*apartado de registro */
+
+
+
+
+function openRegisterModal(event) {
+  if (event) event.preventDefault();
+  const modal = document.getElementById('register-modal');
+  if (modal) {
+    modal.classList.add('active');
+  }
+}
+
+function closeRegisterModal() {
+  const modal = document.getElementById('register-modal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+function submitRegister(event) {
+  if (event) event.preventDefault();
+
+  const name = document.getElementById('reg-name')?.value;
+  const email = document.getElementById('reg-email')?.value;
+  const pass = document.getElementById('reg-pass')?.value;
+  const confirmPass = document.getElementById('reg-confirm-pass')?.value;
+
+  if (pass !== confirmPass) {
+    showToast('Las contraseñas no coinciden');
+    return false;
+  }
+
+  closeRegisterModal();
+  document.getElementById('register-form')?.reset();
+
+  const loginEmail = document.getElementById('login-email');
+  if (loginEmail && email) {
+    loginEmail.value = email;
+  }
+
+  showToast('¡Registro exitoso! Ya puedes iniciar sesión.');
+  return false;
+}
+
+function handleLogin(event) {
+  if (event) event.preventDefault();
+
+  const loginView = document.getElementById('login-view');
+  const appView = document.getElementById('app-view');
+
+  if (loginView && appView) {
+    loginView.classList.remove('active');
+    appView.classList.add('active');
+    showToast('Bienvenido a Global Fit');
+  }
+  return false;
+}
+
+function togglePasswordVisibility() {
+  const passInput = document.getElementById('login-pass');
+  if (passInput) {
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+  }
+}
+
+function switchModule(moduleName, element) {
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => item.classList.remove('active'));
+  if (element) {
+    element.classList.add('active');
+  }
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  if (toast) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+}
+/*final de registro */
