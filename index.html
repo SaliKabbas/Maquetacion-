@@ -551,7 +551,6 @@
             </div>
             </div>
 
-            <div id="socios-grid-view" class="socios-grid">
   
   <!-- TARJETA 1: SOCIO ACTIVO -->
   <div class="socio-card" data-name="Carlos Mendoza" data-status="Activo"
@@ -622,8 +621,6 @@
     </div>
   </div>
 
-</div>
-
           <div class="socio-card" data-name="Alejandro Gómez" data-status="Inactivo">
               <div class="socio-card-header">
                 <div class="socio-info-main">
@@ -675,7 +672,17 @@
                   <td>0414-1234567</td>
                   <td>VIP Black</td>
                   <td><span class="badge-status badge-success">Activo</span></td>
-                  <td><button class="pill-btn" onclick="verFichaSocio('Carlos Mendoza', 'V-18234567', 'VIP Black', 'Activo')">Ficha</button></td>
+                  <td>  
+                    <button class="btn-ficha" onclick="verFichaSocio('Carlos Mendoza', 'V-18234567', 'VIP Black', 'Activo')">
+                    <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+                    <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-ficha btn-toggle-status estado-inactivar" onclick="toggleEstadoSocio(this)">
+                    <i class="fas fa-user-slash"></i>
+                    </button>
+                  </td>
                 </tr>
                 <tr data-name="María Hernández" data-status="Por Vencer">
                   <td><strong>María Hernández</strong></td>
@@ -683,7 +690,17 @@
                   <td>0424-7654321</td>
                   <td>Estándar</td>
                   <td><span class="badge-status badge-warning">Por Vencer</span></td>
-                  <td><button class="pill-btn" onclick="verFichaSocio('María Hernández', 'V-20112334', 'Estándar', 'Por Vencer')">Ficha</button></td>
+                  <td>
+                  <button class="btn-ficha" onclick="verFichaSocio('María Hernández', 'V-20112334', 'Estándar', 'Por Vencer')">
+                  <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn-ficha btn-toggle-status estado-activar" onclick="toggleEstadoSocio(this)">
+                    <i class="fas fa-user-check"></i>
+                  </button>
+                </td>
                 </tr>
                 <tr data-name="Alejandro Gómez" data-status="Inactivo">
                   <td><strong>Alejandro Gómez</strong></td>
@@ -691,7 +708,16 @@
                   <td>0412-5554433</td>
                   <td>Trimestral Pro</td>
                   <td><span class="badge-status badge-danger">Inactivo</span></td>
-                  <td><button class="pill-btn" onclick="verFichaSocio('Alejandro Gómez', 'V-15998877', 'Trimestral Pro', 'Inactivo')">Ficha</button></td>
+                  <td><button class="btn-ficha" onclick="verFichaSocio('Alejandro Gómez', 'V-15998877', 'Trimestral Pro', 'Inactivo')">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn-ficha btn-toggle-status estado-activar" onclick="toggleEstadoSocio(this)">
+                    <i class="fas fa-user-check"></i>
+                  </button>
+                </td>
                 </tr>
               </tbody>
             </table>
@@ -706,7 +732,7 @@
             </button>
           </div>
 
-          <div class="socios-grid">
+          <div class="socios-grid" id="entrenadores-grid">
             <div class="socio-card">
               <div class="socio-card-header">
                 <div class="socio-info-main">
@@ -719,12 +745,13 @@
                 <span class="badge-status badge-success">Disponible</span>
               </div>
               <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-clock"></i> Turno: Mañana (06:00 AM - 02:00 PM)</div>
+                <div class="socio-detail-item"><i class="fas fa-clock"></i> Turno: Mañana (06:00 AM - 01:00 PM)</div>
                 <div class="socio-detail-item"><i class="fas fa-users"></i> Socios asignados: 24</div>
               </div>
               <div class="socio-card-actions">
-               <button class="btn-ficha" onclick="showToast('Ver horario de Ricardo')">Ver Horario</button>
-               <button class="btn-ficha" onclick="abrirModalEditar('Ricardo López', 'Especialista en Hipertrofia', 'ricardo@globalfit.com', '+58 412-1112233', 'manana')">Editar</button>
+               <button class="btn-ficha" onclick="verHorarioEntrenador('Ricardo López', 'Especialista en Hipertrofia', 'manana')"><i class="fas fa-calendar-alt"></i> Ver Horario</button>
+               <button class="btn-ficha btn-editar" onclick="abrirModalEditar('Ricardo López', 'Especialista en Hipertrofia', 'ricardo@globalfit.com', '+58 412-1112233', 'manana')"><i class="fas fa-edit"></i> Editar</button>
+               <button class="btn-ficha btn-borrar" onclick="eliminarEntrenador(this, 'Ricardo López')"><i class="fas fa-trash"></i> Eliminar</button>
              </div>            
             </div>
 
@@ -740,17 +767,17 @@
                 <span class="badge-status badge-success">En Clase</span>
               </div>
               <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-clock"></i> Turno: Tarde (02:00 PM - 09:00 PM)</div>
+                <div class="socio-detail-item"><i class="fas fa-clock"></i> Turno: Tarde (01:00 PM - 06:00 PM)</div>
                 <div class="socio-detail-item"><i class="fas fa-users"></i> Clases impartidas: 12/sem</div>
               </div>  
               <div class="socio-card-actions">
-              <button class="btn-ficha" onclick="showToast('Ver horario de Sofia')">Ver Horario</button>
-              <button class="btn-ficha" onclick="abrirModalEditar('Sofia Fuentes', 'Instructora de Spinning / Crossfit', 'sofia@globalfit.com', '+58 412-4445566', 'tarde')">Editar</button>
+                <button class="btn-ficha" onclick="verHorarioEntrenador('Sofia Fuentes', 'Instructora de Spinning / Crossfit', 'tarde')"><i class="fas fa-calendar-alt"></i> Ver Horario</button>
+                <button class="btn-ficha btn-editar" onclick="abrirModalEditar('Sofia Fuentes', 'Instructora de Spinning / Crossfit', 'sofia@globalfit.com', '+58 412-4445566', 'tarde')"><i class="fas fa-edit"></i> Editar</button>
+                <button class="btn-ficha btn-borrar" onclick="eliminarEntrenador(this, 'Sofia Fuentes')"><i class="fas fa-trash"></i> Eliminar</button>
+              </div>
             </div>
           </div>
-        </div>
 
-         <!-- NUEVO: Cierre de .socios-grid -->
         </div>
 
         <div id="module-caja" class="module-view" style="display: none;">
@@ -992,63 +1019,119 @@
   </div>
 
   <!-- Modal Nuevo Entrenador -->
-<div id="modal-nuevo-entrenador" class="modal-overlay">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3 class="modal-title">
-        <i class="fas fa-user-tie"></i> Registrar Nuevo Entrenador  
-      </h3>
-      <button class="modal-close" onclick="closeModal('modal-nuevo-entrenador')">&times;</button>
+  <div id="modal-nuevo-entrenador" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fas fa-user-tie"></i> Registrar Nuevo Entrenador  
+        </h3>
+        <button class="modal-close" onclick="closeModal('modal-nuevo-entrenador')">&times;</button>
+      </div>
+
+      <form onsubmit="event.preventDefault();">
+        <div class="modal-form-grid">
+          
+          <div class="full-width">
+            <label class="modal-label">NOMBRE COMPLETO</label>
+            <input type="text" id="entrenador-nombre" class="modal-input" placeholder="Ej. Roberto Carlos" required>
+          </div>
+
+          <div class="full-width">
+            <label class="modal-label">ESPECIALIDAD</label>
+            <input type="text" id="entrenador-especialidad" class="modal-input" placeholder="Ej. Crossfit & Halterofilia" required>
+          </div>
+
+          <div class="full-width">
+            <label class="modal-label">CORREO ELECTRÓNICO</label>
+            <input type="email" id="entrenador-email" class="modal-input" placeholder="roberto@globalfit.com" required>
+          </div>
+
+          <div class="full-width">
+            <label class="modal-label">TELÉFONO</label>
+            <input type="text" id="entrenador-telefono" class="modal-input" placeholder="+58 412-5551234" required>
+          </div>
+
+          <div class="full-width">
+            <label class="modal-label">HORARIO / TURNO ASIGNADO</label>
+            <select id="entrenador-horario" class="modal-input" required style="cursor: pointer; appearance: auto;">
+              <option value="" disabled selected>Seleccione el turno del entrenador...</option>
+              <option value="manana">Turno Mañana (06:00 AM - 01:00 PM)</option>
+              <option value="tarde">Turno Tarde (01:00 PM - 06:00 PM)</option>
+              <option value="noche">Turno Noche (06:00 PM - 10:00 PM)</option>
+              <option value="completo">Tiempo Completo / Rotativo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="btn-cancelar-entrenador" class="btn-modal-cancel" >Cancelar</button>
+
+          <button type="submit" id="btn-guardar-entrenador" class="btn-modal-save" >Guardar Entrenador</button>
+        </div>
+      </form>
     </div>
-
-    <form>
-      <div class="modal-form-grid">
-        
-        <div class="full-width">
-          <label class="modal-label">NOMBRE COMPLETO</label>
-          <input type="text" id="entrenador-nombre" class="modal-input" placeholder="Ej. Roberto Carlos" required>
-        </div>
-
-        <div class="full-width">
-          <label class="modal-label">ESPECIALIDAD</label>
-          <input type="text" id="entrenador-especialidad" class="modal-input" placeholder="Ej. Crossfit & Halterofilia" required>
-        </div>
-
-        <div class="full-width">
-          <label class="modal-label">CORREO ELECTRÓNICO</label>
-          <input type="email" id="entrenador-email" class="modal-input" placeholder="roberto@globalfit.com" required>
-        </div>
-
-        <div class="full-width">
-          <label class="modal-label">TELÉFONO</label>
-          <input type="text" id="entrenador-telefono" class="modal-input" placeholder="+58 412-5551234" required>
-        </div>
-
-        <div class="full-width">
-          <label class="modal-label">HORARIO / TURNO ASIGNADO</label>
-          <select id="entrenador-horario" class="modal-input" required style="cursor: pointer; appearance: auto;">
-            <option value="" disabled selected>Seleccione el turno del entrenador...</option>
-            <option value="manana">Turno Mañana (06:00 AM - 01:00 PM)</option>
-            <option value="tarde">Turno Tarde (01:00 PM - 06:00 PM)</option>
-            <option value="noche">Turno Noche (06:00 PM - 10:00 PM)</option>
-            <option value="completo">Tiempo Completo / Rotativo</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" id="btn-cancelar-entrenador" class="btn-modal-cancel" >Cancelar</button>
-
-        <button type="submit" id="btn-guardar-entrenador" class="btn-modal-save" >Guardar Entrenador</button>
-      </div>
-    </form>
   </div>
-</div>
+
+  <!-- Modal Horario Entrenador (Lunes a Viernes) -->
+  <div id="modal-horario-entrenador" class="modal-overlay">
+    <div class="modal-box modal-horario-box">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="horario-modal-title"><i class="fas fa-calendar-alt"></i> Horario de Entrenador</h3>
+          <p id="horario-modal-subtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;"></p>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-horario-entrenador')">&times;</button>
+      </div>
+
+      <div class="horario-container">
+        <div class="horario-summary-card">
+          <div class="horario-info-pill">
+            <i class="fas fa-clock"></i> <span id="horario-modal-turno-nombre">Turno Mañana</span>
+          </div>
+          <div class="horario-info-pill info-badge">
+            <i class="fas fa-calendar-week"></i> Lunes a Viernes
+          </div>
+        </div>
+
+        <div class="weekly-schedule-table">
+          <div class="schedule-row">
+            <div class="day-name"><i class="fas fa-calendar-day"></i> Lunes</div>
+            <div class="day-time" id="time-lunes">06:00 AM - 01:00 PM</div>
+            <div class="day-status"><span class="badge-status badge-success">Asignado</span></div>
+          </div>
+          <div class="schedule-row">
+            <div class="day-name"><i class="fas fa-calendar-day"></i> Martes</div>
+            <div class="day-time" id="time-martes">06:00 AM - 01:00 PM</div>
+            <div class="day-status"><span class="badge-status badge-success">Asignado</span></div>
+          </div>
+          <div class="schedule-row">
+            <div class="day-name"><i class="fas fa-calendar-day"></i> Miércoles</div>
+            <div class="day-time" id="time-miercoles">06:00 AM - 01:00 PM</div>
+            <div class="day-status"><span class="badge-status badge-success">Asignado</span></div>
+          </div>
+          <div class="schedule-row">
+            <div class="day-name"><i class="fas fa-calendar-day"></i> Jueves</div>
+            <div class="day-time" id="time-jueves">06:00 AM - 01:00 PM</div>
+            <div class="day-status"><span class="badge-status badge-success">Asignado</span></div>
+          </div>
+          <div class="schedule-row">
+            <div class="day-name"><i class="fas fa-calendar-day"></i> Viernes</div>
+            <div class="day-time" id="time-viernes">06:00 AM - 01:00 PM</div>
+            <div class="day-status"><span class="badge-status badge-success">Asignado</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button type="button" class="btn-primary-block" onclick="closeModal('modal-horario-entrenador')">Cerrar Horario</button>
+      </div>
+    </div>
+  </div>
 
   <div class="toast-container" id="toast-container"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="./confirmaciones.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="./confirmaciones.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

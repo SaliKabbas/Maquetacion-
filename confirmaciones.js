@@ -28,16 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnGuardar = document.getElementById('btn-guardar-socio');
     if (btnGuardar) {
         btnGuardar.addEventListener('click', (e) => {
-            // 1. PRIMERO definimos la variable "form"
             const form = btnGuardar.closest('form');
 
-            // 2. LUEGO validamos los campos
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return; 
             }
 
-            // 3. DETENEMOS la recarga de la página (ahora sí se ejecutará)
             e.preventDefault();
             
             Confirmaciones.guardar('Se guardarán los datos del formulario.', () => {
@@ -117,12 +114,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             e.preventDefault();
             
-            
-            Confirmaciones.guardar('Se guardarán los datos del formulario.', () => {
-                if (form) form.reset();
-                closeModal('modal-nuevo-entrenador');
-                if (typeof showToast === 'function') showToast('Entrenador guardado correctamente.');
+            Confirmaciones.guardar('Se guardarán los datos del entrenador.', () => {
+                const eventoSimulado = {
+                    preventDefault: () => {},
+                    target: form || document.createElement('form')
+                };
 
+                if (typeof handleGuardarEntrenador === 'function') {
+                    handleGuardarEntrenador(eventoSimulado);
+                } else {
+                    if (form) form.reset();
+                    closeModal('modal-nuevo-entrenador');
+                    if (typeof showToast === 'function') showToast('Entrenador guardado correctamente.');
+                }
             });
         });
     }
@@ -149,9 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnGuardarConfig.addEventListener('click', (e) => {
             e.preventDefault();
             Confirmaciones.guardar('Se guardarán las configuraciones del sistema.', () => {
-                // Lógica futura de configuración
                 if (typeof showToast === 'function') showToast('Configuraciones guardadas correctamente.');
-            })
+            });
         });
     }
 
@@ -169,48 +172,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-/*
--------------------------------------- REGISTRARSE AL SISTEMA ------------------------------------------------------
-*/
 
-// --- REGISTRO DE NUEVO USUARIO ---
+/* -------------------------------- REGISTRARSE AL SISTEMA -------------------------------- */
+
 const btnRegistrarse = document.getElementById('btn-guardar-registro');
 if (btnRegistrarse) {
     btnRegistrarse.addEventListener('click', (e) => {
-        // 1. Prevenir la recarga nativa inmediatamente
         e.preventDefault();
 
-        // 2. Obtener el formulario desde el botón correcto
         const form = btnRegistrarse.closest('form');
 
-        // 3. Validar HTML5 (Campos requeridos, formato de correo, etc.)
         if (!form.checkValidity()) {
             form.reportValidity();
             return; 
         }
 
-        // 4. Validar manualmente que las contraseñas coincidan ANTES del modal
         const pass = document.getElementById('reg-pass')?.value;
         const confirmPass = document.getElementById('reg-confirm-pass')?.value;
 
         if (pass !== confirmPass) {
-            if (typeof showToast === 'function') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Las contraseñas no coinciden',
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Las contraseñas no coinciden',
-                });
-            }
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Las contraseñas no coinciden',
+            });
             return;
         }
 
-        
         const objetoConfirmacion = typeof Confirmaciones !== 'undefined' ? Confirmaciones : confirmaciones;
 
         objetoConfirmacion.guardar('¿Está seguro que desea registrarse?', () => {
@@ -224,7 +212,6 @@ if (btnRegistrarse) {
 /* -------------------------------- OBJETO DE CONFIRMACIONES (SWEETALERT2) -------------------------------- */
 
 const Confirmaciones = {
-    // 1. Confirmación Crítica (Ej: Eliminar un registro)
     eliminar: function(nombreElemento, callbackExito) {
         Swal.fire({
             title: '¿Estás seguro?',
@@ -241,12 +228,11 @@ const Confirmaciones = {
         }).then((result) => {
             if (result.isConfirmed) {
                 callbackExito();
-                this.notificacionExito('Eliminado correctamente');
+               this.notificacionExito('Eliminado correctamente');
             }
         });
     },
 
-    // 2. Confirmación Positiva (Ej: Guardar o Procesar algo importante)
     guardar: function(mensaje, callbackExito) {
         Swal.fire({
             title: '¿Confirmar acción?',
@@ -262,12 +248,10 @@ const Confirmaciones = {
         }).then((result) => {
             if (result.isConfirmed) {
                 callbackExito();
-                // La notificación de éxito se manejará desde app.js (showToast) para no duplicar alertas
             }
         });
     },
 
-    // 3. Confirmación de Procesar Pago
     procesarPago: function(mensaje, callbackExito) {
         Swal.fire({
             title: '¿Confirmar acción?',
@@ -287,7 +271,6 @@ const Confirmaciones = {
         });
     },
 
-    // 4. Confirmación de Abandono (Ej: Cancelar un formulario con datos llenos)
     cancelar: function(callbackExito) {
         Swal.fire({
             title: '¿Deseas salir?',
@@ -307,7 +290,6 @@ const Confirmaciones = {
         });
     },
 
-    // 5. Confirmación de Cierre de Sesión
     cerrarSesion: function(callbackExito) {
         Swal.fire({
             title: '¿Cerrar sesión?',
@@ -327,7 +309,6 @@ const Confirmaciones = {
         });
     },
 
-    // Extras: Notificaciones Toast
     notificacionExito: function(mensaje) {
         Swal.fire({
             toast: true,

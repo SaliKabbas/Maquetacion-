@@ -493,3 +493,131 @@ function toggleEstadoSocio(botonElemento) {
     botonElemento.innerHTML = '<i class="fas fa-user-check"></i> Activar';
   }
 }
+
+function handleGuardarEntrenador(event) {
+  if (event && event.preventDefault) event.preventDefault();
+
+  const nombre = document.getElementById('entrenador-nombre').value || 'Nuevo Entrenador';
+  const especialidad = document.getElementById('entrenador-especialidad').value || 'Entrenador General';
+  const email = document.getElementById('entrenador-email').value || 'entrenador@globalfit.com';
+  const telefono = document.getElementById('entrenador-telefono').value || '+58 412-0000000';
+  const horarioVal = document.getElementById('entrenador-horario').value || 'manana';
+
+  let textoTurno = 'Mañana (06:00 AM - 01:00 PM)';
+  if (horarioVal === 'tarde') {
+    textoTurno = 'Tarde (01:00 PM - 06:00 PM)';
+  } else if (horarioVal === 'noche') {
+    textoTurno = 'Noche (06:00 PM - 10:00 PM)';
+  } else if (horarioVal === 'completo') {
+    textoTurno = 'Tiempo Completo (08:00 AM - 06:00 PM)';
+  }
+
+  const grid = document.querySelector('#module-entrenadores .socios-grid');
+  if (!grid) return;
+
+  const nameParts = nombre.trim().split(' ');
+  const initials = nameParts.length > 1 ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() : nombre.substring(0, 2).toUpperCase();
+
+  const bgClasses = ['avatar-green', 'avatar-purple', 'avatar-blue', 'avatar-amber'];
+  const avatarClass = bgClasses[Math.floor(Math.random() * bgClasses.length)];
+
+  const newCard = document.createElement('div');
+  newCard.className = 'socio-card';
+  newCard.style.opacity = '0';
+  newCard.style.transform = 'scale(0.95)';
+  newCard.style.transition = 'all 0.4s ease';
+
+  newCard.innerHTML = `
+    <div class="socio-card-header">
+      <div class="socio-info-main">
+        <div class="avatar-circle ${avatarClass}">${initials}</div>
+        <div>
+          <div class="member-name">${nombre}</div>
+          <div class="member-id">${especialidad}</div>
+        </div>
+      </div>
+      <span class="badge-status badge-success">Disponible</span>
+    </div>
+    <div class="socio-details">
+      <div class="socio-detail-item"><i class="fas fa-clock"></i> Turno: ${textoTurno}</div>
+      <div class="socio-detail-item"><i class="fas fa-users"></i> Socios asignados: 0</div>
+    </div>
+    <div class="socio-card-actions">
+      <button class="btn-ficha" onclick="verHorarioEntrenador('${nombre}', '${especialidad}', '${horarioVal}')"><i class="fas fa-calendar-alt"></i> Ver Horario</button>
+      <button class="btn-ficha btn-editar" onclick="abrirModalEditar('${nombre}', '${especialidad}', '${email}', '${telefono}', '${horarioVal}')"><i class="fas fa-edit"></i> Editar</button>
+      <button class="btn-ficha btn-borrar" onclick="eliminarEntrenador(this, '${nombre}')"><i class="fas fa-trash"></i> Eliminar</button>
+    </div>
+  `;
+
+  grid.appendChild(newCard);
+
+  setTimeout(() => {
+    newCard.style.opacity = '1';
+    newCard.style.transform = 'scale(1)';
+  }, 50);
+
+  const form = document.querySelector('#modal-nuevo-entrenador form');
+  if (form) form.reset();
+  closeModal('modal-nuevo-entrenador');
+  showToast(`¡Entrenador ${nombre} registrado exitosamente!`);
+}
+
+/**
+ * Elimina una tarjeta de entrenador de la maquetación solicitando confirmación.
+ */
+function eliminarEntrenador(btnElement, nombre) {
+  const card = btnElement.closest('.socio-card');
+  if (!card) return;
+
+  if (typeof Confirmaciones !== 'undefined' && Confirmaciones.eliminar) {
+    Confirmaciones.eliminar(nombre, () => {
+      card.style.transition = 'all 0.3s ease';
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.9)';
+      setTimeout(() => card.remove(), 300);
+    });
+  } else {
+    if (confirm(`¿Estás seguro de eliminar a ${nombre}?`)) {
+      card.style.transition = 'all 0.3s ease';
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.9)';
+      setTimeout(() => card.remove(), 300);
+      showToast(`Entrenador ${nombre} eliminado.`);
+    }
+  }
+}
+
+/**
+ * Muestra el modal con el horario detallado de Lunes a Viernes asignado al entrenador.
+ */
+function verHorarioEntrenador(nombre, especialidad, horarioKey) {
+  let turnoNombre = 'Mañana (06:00 AM - 01:00 PM)';
+  let rangoHora = '06:00 AM - 01:00 PM';
+
+  if (horarioKey === 'tarde') {
+    turnoNombre = 'Tarde (01:00 PM - 06:00 PM)';
+    rangoHora = '01:00 PM - 06:00 PM';
+  } else if (horarioKey === 'noche') {
+    turnoNombre = 'Noche (06:00 PM - 10:00 PM)';
+    rangoHora = '06:00 PM - 10:00 PM';
+  } else if (horarioKey === 'completo') {
+    turnoNombre = 'Tiempo Completo / Rotativo';
+    rangoHora = '08:00 AM - 06:00 PM';
+  }
+
+  const elTitle = document.getElementById('horario-modal-title');
+  const elSubtitle = document.getElementById('horario-modal-subtitle');
+  const elTurno = document.getElementById('horario-modal-turno-nombre');
+
+  if (elTitle) elTitle.innerHTML = `<i class="fas fa-calendar-alt"></i> Horario: ${nombre}`;
+  if (elSubtitle) elSubtitle.textContent = `Especialidad: ${especialidad}`;
+  if (elTurno) elTurno.textContent = `Turno Asignado: ${turnoNombre}`;
+
+  const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+  dias.forEach(dia => {
+    const elTime = document.getElementById(`time-${dia}`);
+    if (elTime) elTime.textContent = rangoHora;
+  });
+
+  openModal('modal-horario-entrenador');
+}
