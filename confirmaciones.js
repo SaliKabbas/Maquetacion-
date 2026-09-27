@@ -169,6 +169,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+/*
+-------------------------------------- REGISTRARSE AL SISTEMA ------------------------------------------------------
+*/
+
+// --- REGISTRO DE NUEVO USUARIO ---
+const btnRegistrarse = document.getElementById('btn-guardar-registro');
+if (btnRegistrarse) {
+    btnRegistrarse.addEventListener('click', (e) => {
+        // 1. Prevenir la recarga nativa inmediatamente
+        e.preventDefault();
+
+        // 2. Obtener el formulario desde el botón correcto
+        const form = btnRegistrarse.closest('form');
+
+        // 3. Validar HTML5 (Campos requeridos, formato de correo, etc.)
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return; 
+        }
+
+        // 4. Validar manualmente que las contraseñas coincidan ANTES del modal
+        const pass = document.getElementById('reg-pass')?.value;
+        const confirmPass = document.getElementById('reg-confirm-pass')?.value;
+
+        if (pass !== confirmPass) {
+            if (typeof showToast === 'function') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden',
+                });
+            }
+            return;
+        }
+
+        
+        const objetoConfirmacion = typeof Confirmaciones !== 'undefined' ? Confirmaciones : confirmaciones;
+
+        objetoConfirmacion.guardar('¿Está seguro que desea registrarse?', () => {
+            if (typeof submitRegister === 'function') {
+                submitRegister();
+            }
+        });
+    });
+}
 
 /* -------------------------------- OBJETO DE CONFIRMACIONES (SWEETALERT2) -------------------------------- */
 

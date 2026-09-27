@@ -386,17 +386,14 @@ function closeRegisterModal() {
 function submitRegister(event) {
   if (event) event.preventDefault();
 
-  const name = document.getElementById('reg-name')?.value;
   const email = document.getElementById('reg-email')?.value;
-  const pass = document.getElementById('reg-pass')?.value;
-  const confirmPass = document.getElementById('reg-confirm-pass')?.value;
 
-  if (pass !== confirmPass) {
-    showToast('Las contraseñas no coinciden');
-    return false;
+  if (typeof closeRegisterModal === 'function') {
+      closeRegisterModal();
+  } else {
+      closeModal('modal-registro'); 
   }
 
-  closeRegisterModal();
   document.getElementById('register-form')?.reset();
 
   const loginEmail = document.getElementById('login-email');
@@ -404,7 +401,12 @@ function submitRegister(event) {
     loginEmail.value = email;
   }
 
-  showToast('¡Registro exitoso! Ya puedes iniciar sesión.');
+  if (typeof showToast === 'function') {
+      showToast('¡Registro exitoso! Ya puedes iniciar sesión.');
+  } else if (typeof Swal !== 'undefined') {
+      Swal.fire('¡Éxito!', '¡Registro exitoso! Ya puedes iniciar sesión.', 'success');
+  }
+
   return false;
 }
 
