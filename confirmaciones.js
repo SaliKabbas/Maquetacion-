@@ -28,25 +28,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnGuardar = document.getElementById('btn-guardar-socio');
     if (btnGuardar) {
         btnGuardar.addEventListener('click', (e) => {
+            // 1. PRIMERO definimos la variable "form"
+            const form = btnGuardar.closest('form');
 
+            // 2. LUEGO validamos los campos
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return; 
             }
 
+            // 3. DETENEMOS la recarga de la página (ahora sí se ejecutará)
             e.preventDefault();
             
             Confirmaciones.guardar('Se guardarán los datos del formulario.', () => {
-
-                const form = btnGuardar.closest('form');
+                
                 const eventoSimulado = {
                     preventDefault: () => {},
                     target: form || document.createElement('form')
                 };
                 
-
                 if (typeof handleGuardarSocio === 'function') {
                     handleGuardarSocio(eventoSimulado);
+                } else {
+                    console.error("La función handleGuardarSocio no existe en app.js");
                 }
             });
         });
@@ -70,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnProcesarPago) {
         btnProcesarPago.addEventListener('click', (e) => {
 
+            const form = btnProcesarPago.closest('form');
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return; 
@@ -104,17 +109,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnGuardarEntrenador) {
         btnGuardarEntrenador.addEventListener('click', (e) => {
 
+            const form = btnGuardarEntrenador.closest('form');
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return; 
             }
 
             e.preventDefault();
-            const form = btnGuardarEntrenador.closest('form');
+            
             
             Confirmaciones.guardar('Se guardarán los datos del formulario.', () => {
                 if (form) form.reset();
                 closeModal('modal-nuevo-entrenador');
+                if (typeof showToast === 'function') showToast('Entrenador guardado correctamente.');
 
             });
         });
@@ -143,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             Confirmaciones.guardar('Se guardarán las configuraciones del sistema.', () => {
                 // Lógica futura de configuración
+                if (typeof showToast === 'function') showToast('Configuraciones guardadas correctamente.');
             })
         });
     }
