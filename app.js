@@ -47,6 +47,7 @@ function handleLogin(event) {
         socios: ['Gestión de Socios', 'Directorio y control de accesos de miembros'],
         membresias: ['Gestión de Membresías y Planes', 'Ofertas, precios y vigencia de suscripciones'],
         entrenadores: ['Personal de Entrenadores', 'Control de instructores y turnos de atención'],
+        tienda: ['Tienda e Inventario', 'Control de stock de suplementos y accesorios'],
         caja: ['Caja y Registro de Pagos', 'Flujo de efectivo e historial de transacciones'],
         configuracion: ['Configuración del Sistema', 'Parámetros generales de la plataforma']
       };
@@ -216,7 +217,17 @@ function handleLogin(event) {
         <td>${telefono}</td>
         <td>${plan}</td>
         <td><span class="badge-status badge-success">Activo</span></td>
-        <td><button class="pill-btn" onclick="verFichaSocio('${nombre}', '${cedula}', '${plan}', 'Activo')">Ficha</button></td>
+        <td>
+        <button class="btn-ficha" onclick="verFichaSocio('${nombre}', '${cedula}', '${plan}', 'Activo')">
+        <i class="fas fa-eye"></i> Ficha
+        </button>
+        <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+                 <i class="fas fa-edit"></i> Editar
+        </button>
+        <button class="btn-ficha btn-toggle-status estado-inactivar"  onclick="toggleEstadoSocio(this)">
+                  <i class="fas fa-user-slash"></i> Inactivar
+        </button>
+        </td>
       `;
 
       tableBody.prepend(newRow);
@@ -351,12 +362,7 @@ function handleGuardarPlan(event) {
       }, 3000);
     }
 
-
- /* 
- * FUNCION: abrirModalEditar
- * DOC: Recibe los datos de la tarjeta, llena los campos del formulario 
- * usando la propiedad .value y luego abre el modal existente. 
- */
+/* EDITAR ENTRENADOR */
 function abrirModalEditar(nombre, especialidad, email, telefono, turno) {
     // 1. Autocompletar los campos de texto
     document.getElementById('entrenador-nombre').value = nombre;
@@ -461,7 +467,7 @@ function showToast2(message) {
 // Función para Inactivar a un socio visualmente
 function toggleEstadoSocio(botonElemento) {
   // 1. Ubicar la tarjeta del socio y la etiqueta de estado
-  const tarjeta = botonElemento.closest('.socio-card');
+  const tarjeta = botonElemento.closest('.socio-card, .widget-card');
   const badgeEstado = tarjeta.querySelector('.badge-status');
   const estadoActual = tarjeta.getAttribute('data-status');
 
@@ -621,3 +627,211 @@ function verHorarioEntrenador(nombre, especialidad, horarioKey) {
 
   openModal('modal-horario-entrenador');
 }
+
+
+    function filterMembresiaTab(status, btn) {
+      document.querySelectorAll('.filter-pills .pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const rows = document.querySelectorAll('#membresias-table tbody tr');
+      rows.forEach(row => {
+        const rowStatus = row.getAttribute('data-status');
+        row.style.display = (status === 'all' || rowStatus === status) ? '' : 'none';
+      });
+    }
+
+    function filterTienda() {
+      const query = document.getElementById('search-tienda').value.toLowerCase();
+      document.querySelectorAll('#tienda-grid-container .socio-card').forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        card.style.display = name.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    function filterTiendaTab(category, btn) {
+      document.querySelectorAll('#module-tienda .filter-pills .pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('#tienda-grid-container .socio-card').forEach(card => {
+        const cat = card.getAttribute('data-category');
+        card.style.display = (category === 'all' || cat === category) ? 'flex' : 'none';
+      });
+    }
+
+    let recaudadoTiendaTotal = 48.50;
+
+    function handleGuardarProducto(event) {
+      event.preventDefault();
+      const nombre = document.getElementById('prod-nombre').value;
+      const categoria = document.getElementById('prod-cat').value;
+      const stock = document.getElementById('prod-stock').value;
+      const precio = parseFloat(document.getElementById('prod-precio').value).toFixed(2);
+
+      const grid = document.getElementById('tienda-grid-container');
+      const card = document.createElement('div');
+      card.className = 'socio-card';
+      card.setAttribute('data-category', categoria);
+      card.setAttribute('data-name', nombre);
+
+      card.innerHTML = `
+        <div class="socio-card-header">
+          <div class="socio-info-main">
+            <div class="avatar-circle avatar-purple"><i class="fas fa-box"></i></div>
+            <div>
+              <div class="member-name">${nombre}</div>
+              <div class="member-id">${categoria}</div>
+            </div>
+          </div>
+          <span class="badge-status badge-success">Stock: <strong>${stock}</strong></span>
+        </div>
+        <div class="socio-details">
+          <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$${precio}</strong></div>
+          <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: ${categoria}</div>
+        </div>
+        <button class="btn-ficha" onclick="venderDirectoProducto('${nombre}', ${precio}, 'custom')">Vender Rápido</button>
+      `;
+
+      grid.prepend(card);
+      
+      // Actualizar select de facturación
+      const select = document.getElementById('factura-prod-select');
+      const opt = document.createElement('option');
+      opt.value = `${nombre}|${precio}`;
+      opt.textContent = `${nombre} ($${precio})`;
+      select.appendChild(opt);
+
+      event.target.reset();
+      closeModal('modal-nuevo-producto');
+      showToast(`Producto "${nombre}" agregado al inventario`);
+    }
+
+    function venderDirectoProducto(nombre, precio, id) {
+      const cant = 1;
+      const total = precio * cant;
+      recaudadoTiendaTotal += total;
+      document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
+
+      const tabla = document.querySelector('#tabla-ventas-tienda tbody');
+      const rowId = 'venta-row-' + Math.floor(Math.random() * 90000);
+      const facturaNum = '#FAC-' + Math.floor(3030 + Math.random() * 90);
+
+      const tr = document.createElement('tr');
+      tr.id = rowId;
+      tr.innerHTML = `
+        <td><strong>${facturaNum}</strong></td>
+        <td>${nombre}</td>
+        <td>${cant}</td>
+        <td>Efectivo Rápido</td>
+        <td>$${total.toFixed(2)}</td>
+        <td>
+          <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('${rowId}', ${total})">
+            <i class="fas fa-trash"></i> Eliminar Venta
+          </button>
+        </td>
+      `;
+      tabla.prepend(tr);
+      showToast(`Venta de ${nombre} facturada correctamente`);
+    }
+
+    function handleFacturarTienda(event) {
+      event.preventDefault();
+      const prodData = document.getElementById('factura-prod-select').value.split('|');
+      const nombre = prodData[0];
+      const precio = parseFloat(prodData[1]);
+      const cant = parseInt(document.getElementById('factura-cant').value);
+      const metodo = document.getElementById('factura-metodo').value;
+
+      const total = precio * cant;
+      recaudadoTiendaTotal += total;
+      document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
+
+      const tabla = document.querySelector('#tabla-ventas-tienda tbody');
+      const rowId = 'venta-row-' + Math.floor(Math.random() * 90000);
+      const facturaNum = '#FAC-' + Math.floor(3025 + Math.random() * 90);
+
+      const tr = document.createElement('tr');
+      tr.id = rowId;
+      tr.innerHTML = `
+        <td><strong>${facturaNum}</strong></td>
+        <td>${nombre}</td>
+        <td>${cant}</td>
+        <td>${metodo}</td>
+        <td>$${total.toFixed(2)}</td>
+        <td>
+          <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('${rowId}', ${total})">
+            <i class="fas fa-trash"></i> Eliminar Venta
+          </button>
+        </td>
+      `;
+      tabla.prepend(tr);
+
+      event.target.reset();
+      closeModal('modal-facturar-tienda');
+      showToast(`Factura ${facturaNum} emitida por $${total.toFixed(2)}`);
+    }
+
+    let filaAEliminar = null;
+    let montoAEliminar = 0;
+
+    function eliminarVentaTienda(rowId, montoVenta) {
+        filaAEliminar = rowId;
+        montoAEliminar = montoVenta;
+        const modal = document.getElementById('modal-eliminar-custom');
+        if (modal) {
+            modal.style.display = 'flex';
+        } else {
+            console.error("No se encontró el elemento #modal-eliminar-custom en el DOM");
+        }
+    }
+
+    // Configurar eventos de los botones cuando cargue la página
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnCancelar = document.getElementById('btn-cancelar-custom');
+        const btnAceptar = document.getElementById('btn-aceptar-custom');
+
+        if (btnCancelar) {
+            btnCancelar.addEventListener('click', () => {
+                document.getElementById('modal-eliminar-custom').style.display = 'none';
+                filaAEliminar = null;
+            });
+        }
+
+        if (btnAceptar) {
+            btnAceptar.addEventListener('click', () => {
+                if (filaAEliminar) {
+                    const fila = document.getElementById(filaAEliminar);
+                    if (fila) {
+                        fila.remove();
+                    }
+                    actualizarTotalRecaudado(-montoAEliminar);
+                }
+
+                document.getElementById('modal-eliminar-custom').style.display = 'none';
+                filaAEliminar = null;
+                mostrarToastNotificacion();
+            });
+        }
+    });
+
+    function mostrarToastNotificacion() {
+        const toast = document.getElementById('toast-notificacion');
+        if (toast) {
+            toast.style.display = 'flex';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+    }
+
+    function actualizarTotalRecaudado(montoARestar) {
+        const badgeTotal = document.getElementById('total-ventas-tienda-badge');
+        if (badgeTotal) {
+            let textoActual = badgeTotal.innerText;
+            let match = textoActual.match(/\$([\d.]+)/);
+            if (match) {
+                let totalActual = parseFloat(match[1]);
+                let nuevoTotal = Math.max(0, totalActual + montoARestar);
+                badgeTotal.innerText = `Total Recaudado Hoy: $${nuevoTotal.toFixed(2)}`;
+            }
+        }
+    }
