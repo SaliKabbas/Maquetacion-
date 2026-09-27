@@ -185,7 +185,18 @@ function handleLogin(event) {
           <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>${plan}</strong></div>
           <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-10-20</div>
         </div>
-        <button class="btn-ficha" onclick="verFichaSocio('${nombre}', '${cedula}', '${plan}', 'Activo')">Ficha Téchnica</button>
+
+        <div class="socio-card-actions-custom">
+        <button class="btn-ficha" onclick="verFichaSocio('${nombre}', '${cedula}', '${plan}', 'Activo')">
+        <i class="fas fa-eye"></i> Ficha
+        </button>
+        <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+                 <i class="fas fa-edit"></i> Editar
+        </button>
+        <button class="btn-ficha btn-toggle-status estado-inactivar"  onclick="toggleEstadoSocio(this)">
+                  <i class="fas fa-user-slash"></i> Inactivar
+        </button>
+        </div>
       `;
 
       gridView.prepend(newCard);
@@ -447,4 +458,38 @@ function showToast2(message) {
 }
   
 
-/*final de registro */
+// Función para Inactivar a un socio visualmente
+function toggleEstadoSocio(botonElemento) {
+  // 1. Ubicar la tarjeta del socio y la etiqueta de estado
+  const tarjeta = botonElemento.closest('.socio-card');
+  const badgeEstado = tarjeta.querySelector('.badge-status');
+  const estadoActual = tarjeta.getAttribute('data-status');
+
+  // 2. Evaluar si está Inactivo para volver a Activar
+  if (estadoActual === 'Inactivo') {
+    // CAMBIAR A ACTIVO
+    tarjeta.setAttribute('data-status', 'Activo');
+    tarjeta.classList.remove('card-inactiva');
+
+    // Actualizar la etiqueta (badge)
+    badgeEstado.textContent = 'Activo';
+    badgeEstado.className = 'badge-status badge-success';
+
+    // Actualizar el botón a estado "Inactivar" (Rojo)
+    botonElemento.className = 'btn-ficha btn-toggle-status estado-inactivar';
+    botonElemento.innerHTML = '<i class="fas fa-user-slash"></i> Inactivar';
+
+  } else {
+    // CAMBIAR A INACTIVO (Aplica tanto si estaba 'Activo' como 'Por Vencer')
+    tarjeta.setAttribute('data-status', 'Inactivo');
+    tarjeta.classList.add('card-inactiva');
+
+    // Actualizar la etiqueta (badge)
+    badgeEstado.textContent = 'Inactivo';
+    badgeEstado.className = 'badge-status badge-danger';
+
+    // Actualizar el botón a estado "Activar" (Verde)
+    botonElemento.className = 'btn-ficha btn-toggle-status estado-activar';
+    botonElemento.innerHTML = '<i class="fas fa-user-check"></i> Activar';
+  }
+}

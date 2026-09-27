@@ -1145,4 +1145,92 @@
 }
 
 
-/*final de registro*/
+/* Contenedor Grid para los botones interactivos */
+.socio-card-actions-custom {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Divide el espacio superior en 2 columnas iguales */
+  gap: 10px; /* Separación de 10px igual a tu diseño original */
+  margin-top: auto; /* Mantiene los botones siempre al fondo de la tarjeta */
+  width: 100%;
+}
+
+/* Modificador para el botón de editar (Mantiene el tamaño de .btn-ficha pero con colores) */
+.btn-ficha.btn-editar {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.btn-ficha.btn-editar:hover {
+  background-color: #3b82f6;
+  color: white;
+}
+
+/* Modificador para el botón de borrar/inactivar */
+.btn-ficha.btn-borrar {
+  grid-column: span 2; /* Hace que el botón de borrar ocupe las dos columnas de abajo (ancho completo) */
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.btn-ficha.btn-borrar:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* Contenedor Grid (Manteniendo la estructura anterior) */
+.socio-card-actions-custom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: auto;
+  width: 100%;
+}
+
+/* Modificador base para el botón de alternar estado */
+.btn-ficha.btn-toggle-status {
+  grid-column: span 2; /* Ocupa todo el ancho inferior */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Estado 1: Botón para INACTIVAR (Rojo) */
+.btn-ficha.btn-toggle-status.estado-inactivar {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.btn-ficha.btn-toggle-status.estado-inactivar:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* Estado 2: Botón para ACTIVAR (Verde) */
+.btn-ficha.btn-toggle-status.estado-activar {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.btn-ficha.btn-toggle-status.estado-activar:hover {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+/* Modificador para editar */
+.btn-ficha.btn-editar {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.btn-ficha.btn-editar:hover {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* Atenuación visual para la tarjeta desactivada */
+.socio-card.card-inactiva {
+  opacity: 0.7;
+}

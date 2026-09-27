@@ -522,40 +522,107 @@
             <div class="socio-card" data-name="Carlos Mendoza" data-status="Activo">
               <div class="socio-card-header">
                 <div class="socio-info-main">
-                  <div class="avatar-circle avatar-blue">CM</div>
+                  <div class="avatar-circle avatar-blue">LL</div>
                   <div>
-                    <div class="member-name">Carlos Mendoza</div>
-                    <div class="member-id">V-18234567</div>
+                    <div class="member-name">Luis Lopez</div>
+                    <div class="member-id">V-18334567</div>
                   </div>
                 </div>
                 <span class="badge-status badge-success">Activo</span>
               </div>
               <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-phone"></i> 0414-1234567</div>
+                <div class="socio-detail-item"><i class="fas fa-phone"></i> 0414-0034567</div>
                 <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>VIP Black</strong></div>
                 <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-10-15</div>
               </div>
-              <button class="btn-ficha" onclick="verFichaSocio('Carlos Mendoza', 'V-18234567', 'VIP Black', 'Activo')">Ficha Téchnica</button>
+
+              <div class="socio-card-actions-custom">
+
+              <button class="btn-ficha" onclick="verFichaSocio('Luis Lopez', 'V-18334567', 'VIP Black', 'Activo')">
+                <i class="fas fa-eye"></i> Ficha
+              </button>
+              <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+                 <i class="fas fa-edit"></i> Editar
+              </button>
+              <button class="btn-ficha btn-toggle-status estado-inactivar"  onclick="toggleEstadoSocio(this)">
+                  <i class="fas fa-user-slash"></i> Inactivar
+              </button>
+
+            </div>
             </div>
 
-            <div class="socio-card" data-name="María Hernández" data-status="Por Vencer">
-              <div class="socio-card-header">
-                <div class="socio-info-main">
-                  <div class="avatar-circle avatar-purple">MH</div>
-                  <div>
-                    <div class="member-name">María Hernández</div>
-                    <div class="member-id">V-20112334</div>
-                  </div>
-                </div>
-                <span class="badge-status badge-warning">Por Vencer</span>
-              </div>
-              <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-phone"></i> 0424-7654321</div>
-                <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>Estándar</strong></div>
-                <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-09-22</div>
-              </div>
-              <button class="btn-ficha" onclick="verFichaSocio('María Hernández', 'V-20112334', 'Estándar', 'Por Vencer')">Ficha Téchnica</button>
-            </div>
+            <div id="socios-grid-view" class="socios-grid">
+  
+  <!-- TARJETA 1: SOCIO ACTIVO -->
+  <div class="socio-card" data-name="Carlos Mendoza" data-status="Activo"
+     data-cedula="V-18234567" 
+     data-telefono="0414-1234567" 
+     data-plan="VIP Black" 
+     data-vencimiento="2026-10-15"
+     >
+
+
+    <div class="socio-card-header">
+      <div class="socio-info-main">
+        <div class="avatar-circle avatar-blue">CM</div>
+        <div>
+          <div class="member-name">Carlos Mendoza</div>
+          <div class="member-id">V-18234567</div>
+        </div>
+      </div>
+      <span class="badge-status badge-success">Activo</span>
+    </div>
+    <div class="socio-details">
+      <div class="socio-detail-item"><i class="fas fa-phone"></i> 0414-1234567</div>
+      <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>VIP Black</strong></div>
+      <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-10-15</div>
+    </div>
+    <!-- NUEVA SECCIÓN DE BOTONES -->
+    <div class="socio-card-actions-custom">
+      <button class="btn-ficha" onclick="verFichaSocio('Carlos Mendoza', 'V-18234567', 'VIP Black', 'Activo')">
+        <i class="fas fa-eye"></i>  Ficha
+      </button>
+      <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+        <i class="fas fa-edit"></i> Editar
+      </button>
+      <button class="btn-ficha btn-toggle-status estado-inactivar" onclick="toggleEstadoSocio(this)">
+        <i class="fas fa-user-slash"></i> Inactivar
+      </button>
+    </div>
+  </div>
+
+  <!-- TARJETA 2: SOCIO POR VENCER -->
+  <div class="socio-card" data-name="María Hernández" data-status="Por Vencer">
+    <div class="socio-card-header">
+      <div class="socio-info-main">
+        <div class="avatar-circle avatar-purple">MH</div>
+        <div>
+          <div class="member-name">María Hernández</div>
+          <div class="member-id">V-20112334</div>
+        </div>
+      </div>
+      <span class="badge-status badge-warning">Por Vencer</span>
+    </div>
+    <div class="socio-details">
+      <div class="socio-detail-item"><i class="fas fa-phone"></i> 0424-7654321</div>
+      <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>Estándar</strong></div>
+      <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-09-22</div>
+    </div>
+    <!-- NUEVA SECCIÓN DE BOTONES -->
+    <div class="socio-card-actions-custom">
+      <button class="btn-ficha" onclick="verFichaSocio('María Hernández', 'V-20112334', 'Estándar', 'Por Vencer')">
+        <i class="fas fa-eye"></i> Ficha
+      </button>
+      <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+        <i class="fas fa-edit"></i> Editar
+      </button>
+      <button class="btn-ficha btn-borrar" onclick="toggleEstadoSocio(this)">
+        <i class="fas fa-user-slash"></i> Inactivar
+      </button>
+    </div>
+  </div>
+
+</div>
 
             <div class="socio-card" data-name="Alejandro Gómez" data-status="Inactivo">
               <div class="socio-card-header">
@@ -573,8 +640,20 @@
                 <div class="socio-detail-item"><i class="fas fa-id-card"></i> Plan: <strong>Trimestral Pro</strong></div>
                 <div class="socio-detail-item"><i class="fas fa-calendar-alt"></i> Vence: 2026-08-30</div>
               </div>
-              <button class="btn-ficha" onclick="verFichaSocio('Alejandro Gómez', 'V-15998877', 'Trimestral Pro', 'Inactivo')">Ficha Téchnica</button>
+
+              <div class="socio-card-actions-custom">
+
+              <button class="btn-ficha" onclick="verFichaSocio('Alejandro Gómez', 'V-15998877', 'Trimestral Pro', 'Inactivo')">
+                <i class="fas fa-eye"></i> Ficha
+              </button>
+              <button class="btn-ficha btn-editar" onclick="editarSocio(this)">
+                 <i class="fas fa-edit"></i> Editar
+              </button>
+             <button class="btn-ficha btn-toggle-status estado-activar" onclick="toggleEstadoSocio(this)">
+              <i class="fas fa-user-check"></i> Activar
+             </button>
             </div>
+            
           </div>
 
           <div id="socios-table-view" class="widget-card" style="display: none;">
