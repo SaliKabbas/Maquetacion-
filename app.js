@@ -1,16 +1,15 @@
-
 function handleLogin(event) {
       event.preventDefault();
       document.getElementById('login-view').classList.remove('active');
       document.getElementById('app-view').classList.add('active');
       showToast('¡Bienvenido al Panel de Global Fit!');
     }
-
+    /*
     function logout() {
       document.getElementById('app-view').classList.remove('active');
       document.getElementById('login-view').classList.add('active');
       showToast('Sesión cerrada correctamente');
-    }
+    }*/
 
     function togglePasswordVisibility() {
       const passInput = document.getElementById('login-pass');
@@ -23,7 +22,6 @@ function handleLogin(event) {
       const selectedModule = document.getElementById('module-' + moduleId);
       if (selectedModule) {
         selectedModule.style.display = 'block';
-        // JS Animation: Fade in transition effect
         selectedModule.style.opacity = '0';
         selectedModule.style.transform = 'translateY(10px)';
         selectedModule.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -49,7 +47,6 @@ function handleLogin(event) {
         socios: ['Gestión de Socios', 'Directorio y control de accesos de miembros'],
         membresias: ['Gestión de Membresías y Planes', 'Ofertas, precios y vigencia de suscripciones'],
         entrenadores: ['Personal de Entrenadores', 'Control de instructores y turnos de atención'],
-        tienda: ['Inventario y Tienda Global Fit', 'Control de comida, bebidas, toallas, guantes y facturación'],
         caja: ['Caja y Registro de Pagos', 'Flujo de efectivo e historial de transacciones'],
         configuracion: ['Configuración del Sistema', 'Parámetros generales de la plataforma']
       };
@@ -120,152 +117,6 @@ function handleLogin(event) {
       });
     }
 
-    function filterTienda() {
-      const query = document.getElementById('search-tienda').value.toLowerCase();
-      document.querySelectorAll('#tienda-grid-container .socio-card').forEach(card => {
-        const name = card.getAttribute('data-name').toLowerCase();
-        card.style.display = name.includes(query) ? 'flex' : 'none';
-      });
-    }
-
-    function filterTiendaTab(category, btn) {
-      document.querySelectorAll('#module-tienda .filter-pills .pill-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      document.querySelectorAll('#tienda-grid-container .socio-card').forEach(card => {
-        const cat = card.getAttribute('data-category');
-        card.style.display = (category === 'all' || cat === category) ? 'flex' : 'none';
-      });
-    }
-
-    let recaudadoTiendaTotal = 48.50;
-
-    function handleGuardarProducto(event) {
-      event.preventDefault();
-      const nombre = document.getElementById('prod-nombre').value;
-      const categoria = document.getElementById('prod-cat').value;
-      const stock = document.getElementById('prod-stock').value;
-      const precio = parseFloat(document.getElementById('prod-precio').value).toFixed(2);
-
-      const grid = document.getElementById('tienda-grid-container');
-      const card = document.createElement('div');
-      card.className = 'socio-card';
-      card.setAttribute('data-category', categoria);
-      card.setAttribute('data-name', nombre);
-
-      card.innerHTML = `
-        <div class="socio-card-header">
-          <div class="socio-info-main">
-            <div class="avatar-circle avatar-purple"><i class="fas fa-box"></i></div>
-            <div>
-              <div class="member-name">${nombre}</div>
-              <div class="member-id">${categoria}</div>
-            </div>
-          </div>
-          <span class="badge-status badge-success">Stock: <strong>${stock}</strong></span>
-        </div>
-        <div class="socio-details">
-          <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$${precio}</strong></div>
-          <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: ${categoria}</div>
-        </div>
-        <button class="btn-ficha" onclick="venderDirectoProducto('${nombre}', ${precio}, 'custom')">Vender Rápido</button>
-      `;
-
-      grid.prepend(card);
-      
-      // Actualizar select de facturación
-      const select = document.getElementById('factura-prod-select');
-      const opt = document.createElement('option');
-      opt.value = `${nombre}|${precio}`;
-      opt.textContent = `${nombre} ($${precio})`;
-      select.appendChild(opt);
-
-      event.target.reset();
-      closeModal('modal-nuevo-producto');
-      showToast(`Producto "${nombre}" agregado al inventario`);
-    }
-
-    function venderDirectoProducto(nombre, precio, id) {
-      const cant = 1;
-      const total = precio * cant;
-      recaudadoTiendaTotal += total;
-      document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
-
-      const tabla = document.querySelector('#tabla-ventas-tienda tbody');
-      const rowId = 'venta-row-' + Math.floor(Math.random() * 90000);
-      const facturaNum = '#FAC-' + Math.floor(3030 + Math.random() * 90);
-
-      const tr = document.createElement('tr');
-      tr.id = rowId;
-      tr.innerHTML = `
-        <td><strong>${facturaNum}</strong></td>
-        <td>${nombre}</td>
-        <td>${cant}</td>
-        <td>Efectivo Rápido</td>
-        <td>$${total.toFixed(2)}</td>
-        <td>
-          <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('${rowId}', ${total})">
-            <i class="fas fa-trash"></i> Eliminar Venta
-          </button>
-        </td>
-      `;
-      tabla.prepend(tr);
-      showToast(`Venta de ${nombre} facturada correctamente`);
-    }
-
-    function handleFacturarTienda(event) {
-      event.preventDefault();
-      const prodData = document.getElementById('factura-prod-select').value.split('|');
-      const nombre = prodData[0];
-      const precio = parseFloat(prodData[1]);
-      const cant = parseInt(document.getElementById('factura-cant').value);
-      const metodo = document.getElementById('factura-metodo').value;
-
-      const total = precio * cant;
-      recaudadoTiendaTotal += total;
-      document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
-
-      const tabla = document.querySelector('#tabla-ventas-tienda tbody');
-      const rowId = 'venta-row-' + Math.floor(Math.random() * 90000);
-      const facturaNum = '#FAC-' + Math.floor(3025 + Math.random() * 90);
-
-      const tr = document.createElement('tr');
-      tr.id = rowId;
-      tr.innerHTML = `
-        <td><strong>${facturaNum}</strong></td>
-        <td>${nombre}</td>
-        <td>${cant}</td>
-        <td>${metodo}</td>
-        <td>$${total.toFixed(2)}</td>
-        <td>
-          <button class="pill-btn" style="color: #ef4444; border-color: rgba(239,68,68,0.3);" onclick="eliminarVentaTienda('${rowId}', ${total})">
-            <i class="fas fa-trash"></i> Eliminar Venta
-          </button>
-        </td>
-      `;
-      tabla.prepend(tr);
-
-      event.target.reset();
-      closeModal('modal-facturar-tienda');
-      showToast(`Factura ${facturaNum} emitida por $${total.toFixed(2)}`);
-    }
-
-    function eliminarVentaTienda(rowId, monto) {
-      const row = document.getElementById(rowId);
-      if (row) {
-        row.style.opacity = '0';
-        row.style.transform = 'translateX(20px)';
-        row.style.transition = 'all 0.3s ease';
-        setTimeout(() => {
-          row.remove();
-          recaudadoTiendaTotal -= monto;
-          if (recaudadoTiendaTotal < 0) recaudadoTiendaTotal = 0;
-          document.getElementById('total-ventas-tienda-badge').textContent = `Total Recaudado Hoy: $${recaudadoTiendaTotal.toFixed(2)}`;
-          showToast('Venta anulada y eliminada por error correctamente');
-        }, 300);
-      }
-    }
-
     function filterSocios() {
       const query = document.getElementById('search-socio').value.toLowerCase();
       const statusFilter = document.getElementById('filter-socio-status').value;
@@ -311,7 +162,6 @@ function handleLogin(event) {
       newCard.setAttribute('data-name', nombre);
       newCard.setAttribute('data-status', 'Activo');
 
-      // JavaScript Animation for new card entrance
       newCard.style.opacity = '0';
       newCard.style.transform = 'scale(0.95)';
       newCard.style.transition = 'all 0.4s ease';
@@ -369,22 +219,38 @@ function handleLogin(event) {
       closeModal('modal-nuevo-socio');
       showToast(`¡Socio ${nombre} registrado exitosamente!`);
     }
+function handleGuardarPlan(event) {
 
-    function handleGuardarPlan(event) {
-      event.preventDefault();
+  event.preventDefault(); 
+
+  
+  Swal.fire({
+    title: '¿Guardar nuevo plan?',
+    text: "Verifica que los datos y beneficios sean correctos.",
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#198754',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Sí, crear plan',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    
+    if (result.isConfirmed) {
+      
       const nombre = document.getElementById('plan-nombre').value;
       const duracion = document.getElementById('plan-duracion').value;
       const precio = parseFloat(document.getElementById('plan-precio').value).toFixed(2);
       const periodo = document.getElementById('plan-periodo').value;
       const beneficiosRaw = document.getElementById('plan-beneficios').value;
       
-      const beneficiosList = beneficiosRaw ? beneficiosRaw.split(',').map(b => `<li><i class="fas fa-check-circle"></i> ${b.trim()}</li>`).join('') : `<li><i class="fas fa-check-circle"></i> Acceso general</li>`;
+      const beneficiosList = beneficiosRaw 
+        ? beneficiosRaw.split(',').map(b => `<li><i class="fas fa-check-circle"></i> ${b.trim()}</li>`).join('') 
+        : `<li><i class="fas fa-check-circle"></i> Acceso general</li>`;
 
       const plansContainer = document.getElementById('plans-grid-container');
       const newPlanCard = document.createElement('div');
       newPlanCard.className = 'plan-card';
       
-      // JavaScript entrance animation
       newPlanCard.style.opacity = '0';
       newPlanCard.style.transform = 'translateY(20px)';
       newPlanCard.style.transition = 'all 0.4s ease';
@@ -403,15 +269,25 @@ function handleLogin(event) {
       `;
 
       plansContainer.appendChild(newPlanCard);
+      
       setTimeout(() => {
         newPlanCard.style.opacity = '1';
         newPlanCard.style.transform = 'translateY(0)';
       }, 50);
 
+      
       event.target.reset();
       closeModal('modal-nuevo-plan');
-      showToast(`¡Plan "${nombre}" creado exitosamente!`);
+
+      
+      Swal.fire(
+        '¡Creado!',
+        `El plan "${nombre}" está listo para ser asignado.`,
+        'success'
+      );
     }
+  });
+}
 
     function handleRegistrarPago(event) {
       event.preventDefault();
@@ -464,54 +340,30 @@ function handleLogin(event) {
       }, 3000);
     }
 
-    function openAddEntrenadorModal() {
-    document.getElementById('modal-add-entrenador').classList.remove('hidden');
+
+ /* 
+ * FUNCION: abrirModalEditar
+ * DOC: Recibe los datos de la tarjeta, llena los campos del formulario 
+ * usando la propiedad .value y luego abre el modal existente. 
+ */
+function abrirModalEditar(nombre, especialidad, email, telefono, turno) {
+    // 1. Autocompletar los campos de texto
+    document.getElementById('entrenador-nombre').value = nombre;
+    document.getElementById('entrenador-especialidad').value = especialidad;
+    document.getElementById('entrenador-email').value = email;
+    document.getElementById('entrenador-telefono').value = telefono;
+    
+    // 2. Seleccionar el turno correcto en el menú desplegable (select)
+    const selectHorario = document.getElementById('entrenador-horario');
+    if (selectHorario) {
+        selectHorario.value = turno; // 'manana', 'tarde', etc.
     }
 
-    function closeAddEntrenadorModal() {
-        document.getElementById('modal-add-entrenador').classList.add('hidden');
-        document.getElementById('form-add-entrenador').reset();
-    }
+    // 3. Abrir el modal
+    openModal('modal-nuevo-entrenador');
+}   
 
-    function handleSaveEntrenador(event) {
-        event.preventDefault();
-        
-        const nombre = document.getElementById('new-ent-nombre').value;
-        const especialidad = document.getElementById('new-ent-especialidad').value;
-        const email = document.getElementById('new-ent-email').value;
-        const telefono = document.getElementById('new-ent-telefono').value;
-
-        console.log("Guardando entrenador:", { nombre, especialidad, email, telefono });
-
-        alert('¡Entrenador registrado con éxito!');
-        closeAddEntrenadorModal();
-    }
-
-    function openHorarioModal(nombreEntrenador, especialidadEntrenador, horariosData) {
-        document.getElementById('horario-nombre-entrenador').innerText = nombreEntrenador;
-        document.getElementById('horario-especialidad').innerText = especialidadEntrenador;
-
-        const container = document.getElementById('horario-list-container');
-        container.innerHTML = '';
-
-        horariosData.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700 text-sm';
-            row.innerHTML = `
-                **${item.dia}
-                ${item.hora}
-            `;
-            container.appendChild(row);
-        });
-
-        document.getElementById('modal-horario').classList.remove('hidden');
-    }
-
-    function closeHorarioModal() {
-        document.getElementById('modal-horario').classList.add('hidden');
-    }
-
-    /*apartado de registro */
+/*apartado de registro */
 
 
 
@@ -577,22 +429,20 @@ function togglePasswordVisibility() {
   }
 }
 
-function switchModule(moduleName, element) {
-  const navItems = document.querySelectorAll('.nav-item');
-  navItems.forEach(item => item.classList.remove('active'));
-  if (element) {
-    element.classList.add('active');
-  }
-}
 
-function showToast(message) {
+
+
+
+function showToast2(message) {
   const toast = document.getElementById('toast');
-  if (toast) {
-    toast.textContent = message;
-    toast.classList.add('show');
+  if (toast2) {
+    toast2.textContent = message;
+    toast2.classList.add('show');
     setTimeout(() => {
-      toast.classList.remove('show');
+      toast2.classList.remove('show');
     }, 3000);
   }
 }
+  
+
 /*final de registro */

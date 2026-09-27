@@ -1,4 +1,4 @@
-:root {
+ :root {
       --primary: #4f46e5;
       --primary-hover: #4338ca;
       --primary-light: #eef2ff;
@@ -1056,33 +1056,47 @@
       .top-header { padding: 0 20px; }
     }
 
-.input-contenedor {
-    position: relative;
-    width: 100%;
-}
 
-.input-contenedor input {
-    width: 100%;
-    padding: 12px 14px 12px 40px; 
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-    box-sizing: border-box;
-}
+    /* MODULOS DE CONFIRMACION */
 
-.input-contenedor i, 
-.input-contenedor svg {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6b7280; 
-    font-size: 16px;
-    pointer-events: none; 
+    .swal2-container {
+    z-index: 99999 !important;
 }
 
 
+[data-theme="dark"] .swal2-popup {
+    background-color: #1f2530 !important; 
+    color: #ffffff !important;  
+    border: #0d111a;          
+}
+
+[data-theme="dark"] .swal2-title,
+[data-theme="dark"] .swal2-html-container {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .swal2-icon {
+    border-color: currentColor;
+}
+
+[data-theme="dark"] .swal2-footer {
+    border-top-color: #2b2b40 !important;
+    color: #a1a5b7 !important;
+}
+
+/* NUEVAS CLASES PARA ALINEAR LOS BOTONES DE LA TARJETA */
+.socio-card-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto; /* Empuja el contenedor completo al fondo de la tarjeta */
+}
+
+/* Modifica el comportamiento de .btn-ficha SOLO cuando está dentro de .socio-card-actions */
+.socio-card-actions .btn-ficha {
+  margin-top: 0; /* Anula el margin-top: auto original para que no se desencajen */
+  flex: 1; /* Hace que ambos botones ocupen exactamente el 50% del ancho disponible */
+}
 
 /* apartado de registro */
 
