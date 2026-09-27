@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnEliminar.addEventListener('click', (e) => {
             e.preventDefault(); 
             Confirmaciones.eliminar('Usuario seleccionado', () => {
-                // Aquí iría la lógica de eliminar del DOM si la tienes
+
             });
         });
     }
@@ -28,17 +28,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnGuardar = document.getElementById('btn-guardar-socio');
     if (btnGuardar) {
         btnGuardar.addEventListener('click', (e) => {
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return; 
+            }
+
             e.preventDefault();
             
             Confirmaciones.guardar('Se guardarán los datos del formulario.', () => {
-                // Simulamos el evento para que handleGuardarSocio pueda hacer el form.reset()
+
                 const form = btnGuardar.closest('form');
                 const eventoSimulado = {
                     preventDefault: () => {},
                     target: form || document.createElement('form')
                 };
                 
-                // Ejecutamos la función real de app.js
+
                 if (typeof handleGuardarSocio === 'function') {
                     handleGuardarSocio(eventoSimulado);
                 }
@@ -63,9 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnProcesarPago = document.getElementById('btn-procesar-pago');
     if (btnProcesarPago) {
         btnProcesarPago.addEventListener('click', (e) => {
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return; 
+            }
+
             e.preventDefault();
             Confirmaciones.procesarPago('Se procesarán los datos del pago.', () => {
-                // Creamos evento simulado para app.js
+
                 const eventoSimulado = { preventDefault: () => {} };
                 
                 if (typeof handleRegistrarPago === 'function') {
@@ -91,13 +103,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnGuardarEntrenador = document.getElementById('btn-guardar-entrenador');
     if (btnGuardarEntrenador) {
         btnGuardarEntrenador.addEventListener('click', (e) => {
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return; 
+            }
+
             e.preventDefault();
             const form = btnGuardarEntrenador.closest('form');
             
             Confirmaciones.guardar('Se guardarán los datos del formulario.', () => {
                 if (form) form.reset();
                 closeModal('modal-nuevo-entrenador');
-                // Si en el futuro creas un handleGuardarEntrenador en app.js, llámalo aquí
+
             });
         });
     }
@@ -109,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
             Confirmaciones.cancelar(() => {
                 closeModal('modal-nuevo-entrenador');
                 
-                // Limpieza manual ya que no hay una función específica en app.js para esto
                 const form = btnCancelarEntrenador.closest('form');
                 if (form) form.reset();
                 
