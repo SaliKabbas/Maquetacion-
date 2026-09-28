@@ -236,7 +236,7 @@ const Confirmaciones = {
     guardar: function(mensaje, callbackExito) {
         Swal.fire({
             title: '¿Confirmar acción?',
-            text: mensaje || "Se guardarán los cambios realizados en el sistema.",
+            text: mensaje || "Se guardarán los cambios realizados.",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: PaletaColores.exito,

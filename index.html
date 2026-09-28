@@ -728,7 +728,7 @@
         <!-- MÓDULO ENTRENADORES -->
         <div id="module-entrenadores" class="module-view" style="display: none;">
           <div class="module-header">
-            <button class="btn-action-primary" onclick="openModal('modal-nuevo-entrenador')">
+            <button class="btn-action-primary" onclick="abrirModalNuevoEntrenador()">
               <i class="fas fa-plus"></i> Nuevo Entrenador
             </button>
           </div>
@@ -806,7 +806,11 @@
           </div>
 
           <div class="socios-grid" id="tienda-grid-container" style="margin-bottom: 40px;">
-            <div class="socio-card" data-category="Comida y Bebida" data-name="Barra de Proteína Pro">
+
+            <!-- Tarjeta Dinámica -->
+          
+           <!-- Tarjeta 1 -->
+            <div class="socio-card" id="producto-card-1" data-category="Comida y Bebida" data-name="Barra de Proteína Pro">
               <div class="socio-card-header">
                 <div class="socio-info-main">
                   <div class="avatar-circle avatar-purple"><i class="fas fa-cookie-bite"></i></div>
@@ -818,13 +822,22 @@
                 <span class="badge-status badge-success">Stock: <strong id="stock-p-1">34</strong></span>
               </div>
               <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$3.50</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$<span id="precio-p-1">3.50</span></strong></div>
                 <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Snack Energético</div>
               </div>
-              <button class="btn-ficha" onclick="venderDirectoProducto('Barra de Proteína Pro', 3.50, '1')">Vender Rápido</button>
+               <div class="socio-card-actions-custom">
+                <button class="btn-ficha" onclick="venderDirectoProducto('Barra de Proteína Pro', 3.50, '1')">Vender Rápido</button>
+                <button class="btn-ficha btn-editar" onclick="abrirModalEditarProducto('producto-card-1', '1')">
+                  <i class="fas fa-pen"></i> Editar
+                </button>
+                <button class="pill-btn btn-ficha btn-toggle-status estado-inactivar" onclick="eliminarProductoCard('producto-card-1')">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </div>
             </div>
 
-            <div class="socio-card" data-category="Comida y Bebida" data-name="Bebida Isotónica Power">
+            <!-- Tarjeta 2 -->
+            <div class="socio-card" id="producto-card-2" data-category="Comida y Bebida" data-name="Bebida Isotónica Power">
               <div class="socio-card-header">
                 <div class="socio-info-main">
                   <div class="avatar-circle avatar-blue"><i class="fas fa-wine-bottle"></i></div>
@@ -836,13 +849,22 @@
                 <span class="badge-status badge-success">Stock: <strong id="stock-p-2">18</strong></span>
               </div>
               <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$2.50</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$<span id="precio-p-2">2.50</span></strong></div>
                 <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Hidratación</div>
               </div>
-              <button class="btn-ficha" onclick="venderDirectoProducto('Bebida Isotónica Power', 2.50, '2')">Vender Rápido</button>
+              <div class="socio-card-actions-custom">
+                <button class="btn-ficha" onclick="venderDirectoProducto('Bebida Isotónica Power', 2.50, '2')">Vender Rápido</button>
+                <button class="btn-ficha btn-editar" onclick="abrirModalEditarProducto('producto-card-2', '2')">
+                  <i class="fas fa-pen"></i> Editar
+                </button>
+                <button class="pill-btn btn-ficha btn-toggle-status estado-inactivar" onclick="eliminarProductoCard('producto-card-2')">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </div>
             </div>
 
-            <div class="socio-card" data-category="Accesorios" data-name="Guantes de Neopreno Gym">
+            <!-- Tarjeta 3 -->
+            <div class="socio-card" id="producto-card-3" data-category="Accesorios" data-name="Guantes de Neopreno Gym">
               <div class="socio-card-header">
                 <div class="socio-info-main">
                   <div class="avatar-circle avatar-amber"><i class="fas fa-mitten"></i></div>
@@ -854,13 +876,22 @@
                 <span class="badge-status badge-warning">Stock: <strong id="stock-p-3">7</strong></span>
               </div>
               <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$15.00</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$<span id="precio-p-3">15.00</span></strong></div>
                 <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Protección</div>
               </div>
-              <button class="btn-ficha" onclick="venderDirectoProducto('Guantes de Neopreno Gym', 15.00, '3')">Vender Rápido</button>
+              <div class="socio-card-actions-custom">
+                <button class="btn-ficha" onclick="venderDirectoProducto('Guantes de Neopreno Gym', 15.00, '3')">Vender Rápido</button>
+                <button class="btn-ficha btn-editar" onclick="abrirModalEditarProducto('producto-card-3', '3')">
+                  <i class="fas fa-pen"></i> Editar
+                </button>
+                <button class="pill-btn btn-ficha btn-toggle-status estado-inactivar" onclick="eliminarProductoCard('producto-card-3')">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </div>
             </div>
 
-            <div class="socio-card" data-category="Accesorios" data-name="Toalla Deportiva Microfibra">
+            <!-- Tarjeta 4 -->
+            <div class="socio-card" id="producto-card-4" data-category="Accesorios" data-name="Toalla Deportiva Microfibra">
               <div class="socio-card-header">
                 <div class="socio-info-main">
                   <div class="avatar-circle avatar-green"><i class="fas fa-bath"></i></div>
@@ -872,11 +903,21 @@
                 <span class="badge-status badge-success">Stock: <strong id="stock-p-4">12</strong></span>
               </div>
               <div class="socio-details">
-                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$8.00</strong></div>
+                <div class="socio-detail-item"><i class="fas fa-tag"></i> Precio: <strong>$<span id="precio-p-4">8.00</span></strong></div>
                 <div class="socio-detail-item"><i class="fas fa-boxes"></i> Categoría: Textil</div>
               </div>
-              <button class="btn-ficha" onclick="venderDirectoProducto('Toalla Deportiva Microfibra', 8.00, '4')">Vender Rápido</button>
-            </div>
+              <div class="socio-card-actions-custom">
+                <button class="btn-ficha" onclick="venderDirectoProducto('Toalla Deportiva Microfibra', 8.00, '4')">Vender Rápido</button>
+                <button class="btn-ficha btn-editar" onclick="abrirModalEditarProducto('producto-card-4', '4')">
+                  <i class="fas fa-pen"></i> Editar
+                </button>
+                <button class="pill-btn btn-ficha btn-toggle-status estado-inactivar" onclick="eliminarProductoCard('producto-card-4')">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </div>
+            </div> 
+
+
           </div>
 
           <div class="widget-card">
@@ -1135,6 +1176,62 @@
     </div>
   </div>
 
+
+  <!-- MODAL EDITAR SOCIO -->
+<div id="modal-editar-socio" class="modal-overlay">
+  <div class="modal-card">
+    <button type="button" class="modal-close-btn" onclick="closeModal('modal-editar-socio')">&times;</button>
+    <div class="modal-header">
+      <div class="modal-icon"><i class="fas fa-user-edit"></i></div>
+      <p class="modal-subtitle">Modificar datos del socio</p>
+    </div>
+
+    <form id="form-editar-socio" onsubmit="handleGuardarEdicionSocio(event)">
+      <div class="form-group">
+        <label class="form-label">Nombre Completo</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user left-icon"></i>
+          <input type="text" id="edit-socio-nombre" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Cédula</label>
+        <div class="input-wrapper">
+          <i class="fas fa-id-card left-icon"></i>
+          <input type="text" id="edit-socio-cedula" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Teléfono</label>
+        <div class="input-wrapper">
+          <i class="fas fa-phone left-icon"></i>
+          <input type="text" id="edit-socio-telefono" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Plan Asignado</label>
+        <div class="input-wrapper">
+          <i class="fas fa-tags left-icon"></i>
+          <select id="edit-socio-plan" class="form-control" required>
+            <option value="Plan Estándar ($35)">Plan Estándar ($35)</option>
+              <option value="Plan Trimestral ($90)">Plan Trimestral ($90)</option>
+              <option value="Plan VIP Black ($350)">Plan VIP Black ($350)</option>
+              <option value="Pase Diario ($5)">Pase Diario ($5)</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login" style="margin-top: 15px;">
+        <span>Guardar Cambios</span> <i class="fas fa-save"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+
   <!-- Modal Nuevo Plan de Membresía -->
   <div id="modal-nuevo-plan" class="modal-overlay">
     <div class="modal-box">
@@ -1255,6 +1352,69 @@
       </form>
     </div>
   </div>
+
+
+   <!-- Modal de Confirmación Personalizado -->
+    <div id="modal-eliminar-custom" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(3px); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="background: #ffffff; width: 90%; max-width: 440px; border-radius: 24px; padding: 35px 25px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+            <div style="width: 65px; height: 65px; background: #fdf2f2; color: #991b1b; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; font-size: 26px;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 15px; font-family: inherit;">¿Desea eliminar este registro?</h3>
+            <hr style="border: none; border-top: 2px solid #e0e7ff; margin-bottom: 20px;">
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 30px; line-height: 1.5; font-family: inherit;">
+                El elemento seleccionado será borrado permanentemente del sistema.
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button id="btn-cancelar-custom" type="button" style="flex: 1; padding: 14px; border-radius: 14px; border: none; background: #f1f5f9; color: #334155; font-weight: 600; font-size: 15px; cursor: pointer;">Cancelar</button>
+                <button id="btn-aceptar-custom" type="button" style="flex: 1; padding: 14px; border-radius: 14px; border: none; background: #991b1b; color: white; font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(153, 27, 27, 0.3);">Sí, Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación Toast en la esquina inferior derecha -->
+    <div id="toast-notificacion" style="display: none; position: fixed; bottom: 25px; right: 25px; background: #ffffff; padding: 16px 24px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); z-index: 10000; align-items: center; gap: 14px; animation: entradaToast 0.3s ease-out;">
+        <div style="width: 32px; height: 32px; background: #22c55e; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">
+            <i class="fas fa-check"></i>
+        </div>
+        <span style="font-size: 15px; font-weight: 700; color: #0f172a; font-family: inherit;">Se ha eliminado correctamente</span>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE PRODUCTO -->
+    <div id="modal-editar-producto" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(3px); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="background: #ffffff; width: 90%; max-width: 440px; border-radius: 24px; padding: 35px 25px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+            <div style="width: 65px; height: 65px; background: #eff6ff; color: #3b82f6; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; font-size: 26px;">
+                <i class="fas fa-pen-to-square"></i>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 15px;">Editar Producto</h3>
+            <hr style="border: none; border-top: 2px solid #e0e7ff; margin-bottom: 20px;">
+            
+            <div style="text-align: left; display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
+                <div>
+                    <label style="font-size: 13px; font-weight: 600; color: #64748b;">Nombre del Producto</label>
+                    <input type="text" id="edit-prod-nombre" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; margin-top: 4px;">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 13px; font-weight: 600; color: #64748b;">Stock</label>
+                        <input type="number" id="edit-prod-stock" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; margin-top: 4px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 13px; font-weight: 600; color: #64748b;">Precio ($)</label>
+                        <input type="text" id="edit-prod-precio" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; margin-top: 4px;">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button id="btn-cancelar-edicion-prod" type="button" style="flex: 1; padding: 14px; border-radius: 14px; border: none; background: #f1f5f9; color: #334155; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button id="btn-guardar-edicion-prod" type="button" style="flex: 1; padding: 14px; border-radius: 14px; border: none; background: #3b82f6; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+
+
 
   <!-- Modal Nuevo Entrenador -->
   <div id="modal-nuevo-entrenador" class="modal-overlay">

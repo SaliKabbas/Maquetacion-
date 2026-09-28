@@ -1145,6 +1145,14 @@
   color: #1e293b;
 }
 
+.producto-card-actions-custom {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Divide el espacio superior en 2 columnas iguales */
+  gap: 10px; /* Separación de 10px igual a tu diseño original */
+  margin-top: auto; /* Mantiene los botones siempre al fondo de la tarjeta */
+  width: 100%;
+}
+
 
 /* Contenedor Grid para los botones interactivos */
 .socio-card-actions-custom {
