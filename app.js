@@ -6,7 +6,7 @@ function handleLogin(event) {
       showToast('¡Bienvenido al Panel de Global Fit!');
     }
    
-
+ /* */
 
     // Función de cierre de sesión corregida y activada
     function logout() {

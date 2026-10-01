@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* -------------------------------- MODULO DE CONFIGURACION -------------------------------- */
+    /*  -------------------------------- MODULO DE CONFIGURACION -------------------------------- */
     
     const btnGuardarConfig = document.getElementById('btn-guardar-config');
     if (btnGuardarConfig) {

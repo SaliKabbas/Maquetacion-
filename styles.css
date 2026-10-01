@@ -562,6 +562,7 @@ body {
 .modal-overlay.active .modal-box { transform: translateY(0); }
 
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.modal-header p {text-align: center; flex: 1; margin: 0;}
 .modal-title { font-size: 1.35rem; font-weight: 800; color: var(--text-main); }
 .modal-close { background: none; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer; }
 
