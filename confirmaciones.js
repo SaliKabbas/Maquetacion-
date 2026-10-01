@@ -165,9 +165,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCerrarSesion.addEventListener('click', (e) => {
             e.preventDefault();
             Confirmaciones.cerrarSesion(() => {
+                if(logout && typeof logout === 'function'){
+                logout();
+            }else{
                 document.getElementById('app-view').classList.remove('active');
                 document.getElementById('login-view').classList.add('active');
                 if (typeof showToast === 'function') showToast('Sesión cerrada correctamente');
+            }
             });
         });
     }

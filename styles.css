@@ -877,3 +877,65 @@ textarea.modal-input { resize: vertical; min-height: 90px; font-family: inherit;
         overflow-x: hidden;
     }
 }
+
+.view-screen:not(.active) {
+  display: none !important;
+}
+
+/* FIX 2: Ajuste del Sidebar y Botón Cerrar Sesión */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(25px + env(safe-area-inset-bottom)); 
+}
+.sidebar-menu {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.btn-logout {
+  margin-top: auto; 
+  position: relative;
+  z-index: 10;
+}
+
+/* FIX 3: Solución al scroll doble en las tablas */
+.widget-card {
+  overflow: hidden;
+  max-width: 100%;
+}
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 10px;
+}
+.dashboard-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+/* FIX 4: Reorganización del bloque "Estatus de Membresías" */
+.widget-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.widget-header > div {
+  flex: 1 1 min-content;
+}
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

@@ -5,12 +5,32 @@ function handleLogin(event) {
       document.getElementById('app-view').classList.add('active');
       showToast('¡Bienvenido al Panel de Global Fit!');
     }
-    /*
+   
+
+
+    // Función de cierre de sesión corregida y activada
     function logout() {
+      // 1. Cambiar de vista
       document.getElementById('app-view').classList.remove('active');
       document.getElementById('login-view').classList.add('active');
+      
+      // 2. Prevenir que el sidebar se quede trabado si se cerró sesión desde un móvil
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar && sidebar.classList.contains('active-mobile')) {
+        sidebar.classList.remove('active-mobile');
+      }
+      if (overlay && overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+      }
+      
       showToast('Sesión cerrada correctamente');
-    }*/
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('login-pass');
+      passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    }
 
     function togglePasswordVisibility() {
       const passInput = document.getElementById('login-pass');
