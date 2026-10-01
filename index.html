@@ -181,10 +181,18 @@
 
     <main class="main-content">
       <header class="top-header">
-        <div>
-          <h3 id="top-header-title" class="top-header-title">Panel Principal</h3>
-          <span id="top-header-subtitle" class="top-header-subtitle">Resumen en tiempo real del gimnasio Global Fit</span>
-        </div>
+
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+    <button class="hamburger-btn" type="button" aria-label="Abrir Menú" onclick="window.toggleSidebar(event)" style="display: none; background: none; border: none; font-size: 1.5rem; color: inherit; cursor: pointer;">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div>
+      <h3 id="top-header-title" class="top-header-title">Panel Principal</h3>
+      <span id="top-header-subtitle" class="top-header-subtitle">Resumen en tiempo real del gimnasio Global Fit</span>
+    </div>
+  </div>
+
 
         <div class="top-header-actions">
           <button class="theme-toggle-btn" onclick="toggleTheme()">
@@ -266,6 +274,7 @@
                 <a class="widget-link" onclick="switchModule('socios')">Ver directorio →</a>
               </div>
 
+              <div class="table-responsive">
               <table class="dashboard-table">
                 <thead>
                   <tr>
@@ -320,6 +329,7 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
             </div>
 
             <div class="widget-card">
@@ -445,6 +455,8 @@
               </div>
             </div>
 
+
+            <div class="table-responsive">
             <table class="dashboard-table" id="membresias-table">
               <thead>
                 <tr>
@@ -491,6 +503,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 
@@ -654,6 +667,7 @@
 
           <!-- TABLA SOCIOS -->
           <div id="socios-table-view" class="widget-card" style="display: none;">
+            <div class="table-responsive">
             <table class="dashboard-table" id="socios-table-element">
               <thead>
                 <tr>
@@ -722,6 +736,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 
@@ -929,6 +944,7 @@
               <span class="badge-status badge-success" id="total-ventas-tienda-badge">Total Recaudado Hoy: $48.50</span>
             </div>
 
+            <div class="table-responsive">
             <table class="dashboard-table" id="tabla-ventas-tienda">
               <thead>
                 <tr>
@@ -979,6 +995,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 
@@ -994,6 +1011,7 @@
             <div class="widget-header">
               <h3 class="widget-title">Historial de Transacciones Recientes</h3>
             </div>
+            <div class="table-responsive">
             <table class="dashboard-table" id="tabla-caja">
               <thead>
                 <tr>
@@ -1028,6 +1046,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 

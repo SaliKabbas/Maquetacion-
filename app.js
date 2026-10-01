@@ -1,3 +1,4 @@
+
 function handleLogin(event) {
       event.preventDefault();
       document.getElementById('login-view').classList.remove('active');
@@ -56,6 +57,11 @@ function handleLogin(event) {
         titleEl.textContent = titles[moduleId][0];
         subTitleEl.textContent = titles[moduleId][1];
       }
+      const sidebar = document.querySelector('.sidebar');
+    if (sidebar && sidebar.classList.contains('active-mobile')) {
+      sidebar.classList.remove('active-mobile');
+    }
+
     }
 
     function toggleTheme() {
@@ -1130,3 +1136,46 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 });
+
+
+// ==========================================
+// CONTROL DEL MENU LATERAL (SIDEBAR) EN MOVILES
+// ==========================================
+
+// Exponer la función globalmente para que el HTML la detecte en teléfonos
+window.toggleSidebar = function(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation(); // Evita que el evento se cancele en pantallas táctiles
+  }
+
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+
+  if (sidebar) {
+    sidebar.classList.toggle('active-mobile');
+  }
+
+  if (overlay) {
+    overlay.classList.toggle('active');
+  }
+};
+
+// Cierre automático al cambiar de módulo en móviles
+const originalSwitchModule = window.switchModule;
+if (typeof originalSwitchModule === 'function') {
+  window.switchModule = function(moduleId, element) {
+    originalSwitchModule(moduleId, element);
+    
+    // Si el sidebar está abierto en teléfono, cerrarlo al hacer clic en un módulo
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    if (sidebar && sidebar.classList.contains('active-mobile')) {
+      sidebar.classList.remove('active-mobile');
+    }
+    if (overlay && overlay.classList.contains('active')) {
+      overlay.classList.remove('active');
+    }
+  };
+}
